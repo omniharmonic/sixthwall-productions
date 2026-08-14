@@ -1,0 +1,19 @@
+---
+import { site } from '../config/site';
+import { emphasize } from '../lib/emphasis';
+---
+
+<div class="close" id="closing">
+  <h2>
+    {
+      site.closing.statement.map((line, index) => (
+        <>
+          {index > 0 && <br />}
+          <Fragment set:html={emphasize(line)} />
+        </>
+      ))
+    }
+  </h2>
+  <a class="cta" href={`mailto:${site.email}`}>{site.closing.cta}</a>
+  <small>{site.name}</small>
+</div>

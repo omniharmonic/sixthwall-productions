@@ -1,0 +1,29 @@
+---
+import { getPanels } from '../lib/panels';
+import { emphasize } from '../lib/emphasis';
+
+const panels = await getPanels();
+---
+
+{/*
+  Every panel is stacked in one fixed rail and cross-faded by scroll position.
+  The data-* attributes are the contract with scene.ts: it reads the timings
+  back off the DOM rather than duplicating them in a config, so a panel's
+  markdown frontmatter remains the only place its timing is written.
+*/}
+<div class="copy">
+  {
+    panels.map(({ entry, Content }) => (
+      <article
+        class="panel"
+        data-in={entry.data.scrollIn}
+        data-out={entry.data.scrollOut}
+        data-face={entry.data.face === undefined ? undefined : String(entry.data.face)}
+      >
+        <div class="eyebrow">{entry.data.eyebrow}</div>
+        <h2 set:html={emphasize(entry.data.heading)} />
+        <Content />
+      </article>
+    ))
+  }
+</div>

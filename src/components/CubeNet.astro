@@ -1,0 +1,48 @@
+---
+/**
+ * The cube net, laid out as a cross.
+ *
+ * Markup only establishes the hierarchy — the lid is nested inside the north
+ * flap so that folding the north flap carries the lid with it. All positions,
+ * transform origins, the mini cubes and the lattice circles are set by
+ * scene.ts, which reads the face edge from the --S custom property.
+ *
+ * Faces carry data-face 0-5, matching the `face` field in the wall panels.
+ */
+const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI'];
+---
+
+<div class="stage">
+  <div class="scene">
+    <div class="orbit" id="orbit">
+      <div class="net" id="net">
+        <div class="board" id="board"></div>
+
+        {/* centre of the cross · Wall I */}
+        <div class="flap" id="f-base">
+          <div class="face" data-face="0"><em>{NUMERALS[0]}</em></div>
+        </div>
+
+        {/* north · Wall II — carries the lid · Wall VI */}
+        <div class="flap" id="f-north">
+          <div class="face" data-face="1"><em>{NUMERALS[1]}</em></div>
+          <div class="flap" id="f-lid">
+            <div class="face" data-face="5"><em>{NUMERALS[5]}</em></div>
+          </div>
+        </div>
+
+        <div class="flap" id="f-south">
+          <div class="face" data-face="2"><em>{NUMERALS[2]}</em></div>
+        </div>
+        <div class="flap" id="f-west">
+          <div class="face" data-face="3"><em>{NUMERALS[3]}</em></div>
+        </div>
+        <div class="flap" id="f-east">
+          <div class="face" data-face="4"><em>{NUMERALS[4]}</em></div>
+        </div>
+
+        <svg class="lattice" id="lattice" viewBox="0 0 100 100" aria-hidden="true"></svg>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+---
+/**
+ * Chapter rail. One tick per wall; scene.ts lights tick N over the same scroll
+ * window as the panel that declares `face: N`.
+ */
+const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI'];
+---
+
+<nav class="rail" aria-hidden="true">
+  {NUMERALS.map((numeral, index) => <i data-tick={index}>{numeral}</i>)}
+</nav>

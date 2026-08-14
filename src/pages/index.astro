@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import Masthead from '../components/Masthead.astro';
+import Rail from '../components/Rail.astro';
+import CubeNet from '../components/CubeNet.astro';
+import Hero from '../components/Hero.astro';
+import Panels from '../components/Panels.astro';
+import Closing from '../components/Closing.astro';
+import { choreography } from '../config/choreography';
+---
+
+<Base isRoot>
+  <Masthead />
+  <Rail />
+
+  <CubeNet />
+
+  <Hero />
+  <Panels />
+  <Closing />
+
+  {/*
+    The only thing that makes the page scrollable. Its height sets the pace of
+    the entire timeline — see choreography.scrollLength.
+  */}
+  <div class="scroller" style={`height:${choreography.scrollLength}`}></div>
+</Base>
+
+<script>
+  import { mountScene } from '../scripts/scene';
+
+  mountScene();
+</script>

@@ -1,0 +1,21 @@
+---
+import { site } from '../config/site';
+import { emphasize } from '../lib/emphasis';
+---
+
+<div class="hero" id="hero">
+  <div class="wordmark">{site.name}</div>
+  <div class="rule"></div>
+  <p class="line">
+    {
+      site.taglineLines.map((line, index) => (
+        <>
+          {index > 0 && <br />}
+          <Fragment set:html={emphasize(line)} />
+        </>
+      ))
+    }
+  </p>
+</div>
+
+<div class="cue" id="cue">Scroll</div>

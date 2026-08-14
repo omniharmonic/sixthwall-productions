@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sixth Wall Productions</title>
+<meta name="description" content="Ritual theatre, immersive worlds, and story partnership. We build fictions strong enough to become worlds.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:      #08080A;
+    --ink-lift: #101015;
+    --bone:     #E8E3D9;
+    --muted:    rgba(232,227,217,.44);
+    --faint:    rgba(232,227,217,.16);
+    --brass:    #B98F3E;
+    --brass-dim:rgba(185,143,62,.34);
+    --S: 210px;              /* face edge */
+    --display: "Cormorant Garamond", "Times New Roman", serif;
+    --util: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:auto; }
+  body{
+    background: var(--ink);
+    color: var(--bone);
+    font-family: var(--display);
+    font-weight:300;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:""; position:fixed; inset:0; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(120% 90% at 50% 42%, var(--ink-lift) 0%, rgba(8,8,10,0) 62%),
+      radial-gradient(60% 40% at 50% 100%, rgba(185,143,62,.05) 0%, rgba(8,8,10,0) 70%);
+  }
+  /* fine grain */
+  body::after{
+    content:""; position:fixed; inset:-50%; z-index:60; pointer-events:none; opacity:.035;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/></filter><rect width='140' height='140' filter='url(%23n)'/></svg>");
+  }
+
+  /* ─────────── chrome ─────────── */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:40;
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:26px clamp(20px,5vw,52px);
+    font-family:var(--util); font-size:10.5px; letter-spacing:.34em; text-transform:uppercase;
+    mix-blend-mode:difference;
+  }
+  .mark{ color:var(--bone); }
+  .mark b{ font-weight:400; }
+  .mark span{ opacity:.5; }
+  header a{ color:var(--muted); text-decoration:none; transition:color .4s; }
+  header a:hover, header a:focus-visible{ color:var(--bone); }
+
+  /* right rail */
+  .rail{
+    position:fixed; right:clamp(16px,3.4vw,40px); top:50%; transform:translateY(-50%);
+    z-index:30; display:flex; flex-direction:column; gap:14px; align-items:flex-end;
+    font-family:var(--util); font-size:9.5px; letter-spacing:.22em;
+  }
+  .rail i{ font-style:normal; color:var(--faint); transition:color .5s ease, letter-spacing .5s ease; }
+  .rail i.on{ color:var(--brass); letter-spacing:.34em; }
+  @media (max-width:760px){ .rail{ display:none; } }
+
+  /* ─────────── stage ─────────── */
+  .stage{ position:sticky; top:0; height:100svh; z-index:5; }
+  .scene{
+    position:absolute; inset:0;
+    perspective:1500px; perspective-origin:50% 46%;
+  }
+  .orbit{
+    position:absolute; left:50%; top:46%;
+    width:0; height:0;
+    transform-style:preserve-3d;
+    will-change:transform;
+  }
+  .net{ position:absolute; left:0; top:0; width:0; height:0; transform-style:preserve-3d; }
+
+  .flap{
+    position:absolute; width:var(--S); height:var(--S);
+    transform-style:preserve-3d; will-change:transform;
+  }
+  .face{
+    position:absolute; inset:0;
+    background:
+      linear-gradient(158deg, rgba(255,255,255,.085) 0%, rgba(255,255,255,.022) 46%, rgba(255,255,255,.055) 100%);
+    border:1px solid rgba(185,143,62,.30);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.16),
+      inset 0 0 46px rgba(255,255,255,.035),
+      0 0 34px rgba(185,143,62,.055);
+    backface-visibility:visible;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .face em{
+    font-family:var(--util); font-style:normal;
+    font-size:11px; letter-spacing:.3em; color:rgba(232,227,217,.30);
+    transition:color .6s ease;
+  }
+  .face.lit em{ color:var(--brass); }
+  .face.lit{
+    border-color:rgba(185,143,62,.62);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.22),
+      inset 0 0 60px rgba(185,143,62,.10),
+      0 0 60px rgba(185,143,62,.16);
+  }
+
+  /* the board — checkered floor beneath the net */
+  .board{
+    position:absolute; width:calc(var(--S)*4); height:calc(var(--S)*4);
+    left:calc(var(--S)*-2); top:calc(var(--S)*-2);
+    transform:translateZ(-1px);
+    background-image:
+      conic-gradient(rgba(232,227,217,1) 90deg, transparent 90deg 180deg,
+                     rgba(232,227,217,1) 180deg 270deg, transparent 270deg);
+    background-size:calc(var(--S)/2) calc(var(--S)/2);
+    opacity:0; will-change:opacity;
+    -webkit-mask-image:radial-gradient(closest-side, #000 40%, transparent 100%);
+            mask-image:radial-gradient(closest-side, #000 40%, transparent 100%);
+  }
+
+  /* mini cubes */
+  .mini{ position:absolute; width:calc(var(--S)*.34); height:calc(var(--S)*.34); transform-style:preserve-3d; will-change:transform, opacity; opacity:0; }
+  .mini > div{
+    position:absolute; inset:0;
+    border:1px solid rgba(185,143,62,.46);
+    background:linear-gradient(150deg, rgba(255,255,255,.10), rgba(255,255,255,.015));
+    box-shadow:inset 0 0 20px rgba(185,143,62,.10);
+  }
+
+  /* lattice */
+  .lattice{
+    position:absolute; width:calc(var(--S)*5.4); height:calc(var(--S)*5.4);
+    left:calc(var(--S)*-2.7); top:calc(var(--S)*-2.7);
+    opacity:0; will-change:opacity, transform;
+  }
+  .lattice circle{ fill:none; stroke:rgba(185,143,62,.55); stroke-width:.7; vector-effect:non-scaling-stroke; }
+
+  /* ─────────── copy ─────────── */
+  .copy{
+    position:fixed; z-index:20; pointer-events:none;
+    left:clamp(20px,7vw,96px); top:50%; transform:translateY(-50%);
+    width:min(30ch, 34vw);
+  }
+  .panel{
+    position:absolute; left:0; top:50%; width:100%;
+    opacity:0; will-change:opacity, transform;
+  }
+  .eyebrow{
+    font-family:var(--util); font-size:10px; letter-spacing:.36em; text-transform:uppercase;
+    color:var(--brass); display:flex; align-items:center; gap:12px; margin-bottom:20px;
+  }
+  .eyebrow::after{ content:""; height:1px; flex:1; background:var(--brass-dim); }
+  .panel h2{
+    font-weight:300; font-size:clamp(30px,3.5vw,46px); line-height:1.06; letter-spacing:-.012em;
+    margin-bottom:18px;
+  }
+  .panel h2 i{ font-style:italic; color:rgba(232,227,217,.72); }
+  .panel p{
+    font-size:clamp(16px,1.24vw,19px); line-height:1.62; color:var(--muted);
+  }
+  .panel p + p{ margin-top:14px; }
+
+  /* hero is centered, not railed */
+  .hero{
+    position:fixed; inset:0; z-index:20; pointer-events:none;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; will-change:opacity, transform;
+  }
+  .hero .wordmark{
+    font-family:var(--util); font-weight:300;
+    font-size:clamp(11px,1.5vw,14px); letter-spacing:.62em; text-transform:uppercase;
+    text-indent:.62em; color:var(--bone);
+  }
+  .hero .rule{ width:52px; height:1px; background:var(--brass-dim); margin:26px 0; }
+  .hero .line{
+    font-size:clamp(21px,2.7vw,34px); line-height:1.36; font-weight:300;
+    max-width:19ch; color:rgba(232,227,217,.82);
+  }
+  .hero .line i{ font-style:italic; }
+  .cue{
+    position:fixed; bottom:34px; left:50%; transform:translateX(-50%); z-index:20;
+    font-family:var(--util); font-size:9.5px; letter-spacing:.34em; text-transform:uppercase;
+    color:var(--faint); pointer-events:none;
+  }
+
+  /* closing block sits at the very end, centered */
+  .close{
+    position:fixed; inset:0; z-index:22; pointer-events:none;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; opacity:0; will-change:opacity;
+  }
+  .close h2{ font-size:clamp(28px,4vw,54px); font-weight:300; line-height:1.14; max-width:16ch; }
+  .close h2 i{ font-style:italic; color:var(--brass); }
+  .close .cta{
+    pointer-events:auto; margin-top:34px;
+    font-family:var(--util); font-size:11px; letter-spacing:.3em; text-transform:uppercase;
+    color:var(--bone); text-decoration:none;
+    border-bottom:1px solid var(--brass-dim); padding-bottom:7px;
+    transition:border-color .5s ease, color .5s ease;
+  }
+  .close .cta:hover, .close .cta:focus-visible{ border-color:var(--brass); color:var(--brass); }
+  .close small{
+    display:block; margin-top:46px;
+    font-family:var(--util); font-size:9.5px; letter-spacing:.26em; text-transform:uppercase; color:var(--faint);
+  }
+
+  .scroller{ position:relative; z-index:2; }
+
+  @media (max-width:760px){
+    :root{ --S:132px; }
+    .scene{ perspective:1050px; perspective-origin:50% 38%; }
+    .orbit{ top:36%; }
+    .copy{ left:22px; right:22px; width:auto; top:auto; bottom:76px; transform:none; }
+    .panel{ top:auto; bottom:0; }
+    .panel h2{ font-size:27px; }
+    .panel p{ font-size:15.5px; line-height:1.58; }
+    .hero{ justify-content:center; }
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .stage{ position:relative; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="mark"><b>Sixth Wall</b> <span>Productions</span></div>
+  <a href="mailto:hello@sixthwall.co">Contact</a>
+</header>
+
+<nav class="rail" aria-hidden="true">
+  <i data-tick="0">I</i><i data-tick="1">II</i><i data-tick="2">III</i>
+  <i data-tick="3">IV</i><i data-tick="4">V</i><i data-tick="5">VI</i>
+</nav>
+
+<div class="stage">
+  <div class="scene">
+    <div class="orbit" id="orbit">
+      <div class="net" id="net">
+        <div class="board" id="board"></div>
+
+        <!-- centre of the cross · Wall I -->
+        <div class="flap" id="f-base"><div class="face" data-face="0"><em>I</em></div></div>
+
+        <!-- north · Wall II — carries the lid · Wall VI -->
+        <div class="flap" id="f-north">
+          <div class="face" data-face="1"><em>II</em></div>
+          <div class="flap" id="f-lid"><div class="face" data-face="5"><em>VI</em></div></div>
+        </div>
+
+        <div class="flap" id="f-south"><div class="face" data-face="2"><em>III</em></div></div>
+        <div class="flap" id="f-west"><div class="face" data-face="3"><em>IV</em></div></div>
+        <div class="flap" id="f-east"><div class="face" data-face="4"><em>V</em></div></div>
+
+        <svg class="lattice" id="lattice" viewBox="0 0 100 100"></svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── copy ── -->
+<div class="hero" id="hero">
+  <div class="wordmark">Sixth Wall Productions</div>
+  <div class="rule"></div>
+  <p class="line">Theatre has six walls.<br><i>The last one is the street.</i></p>
+</div>
+<div class="cue" id="cue">Scroll</div>
+
+<div class="copy">
+  <article class="panel" data-in="0.045" data-out="0.150">
+    <div class="eyebrow">Wall I &middot; The Impulse</div>
+    <h2>Something wants to <i>be made</i></h2>
+    <p>Before language, before form, before anyone has agreed on what it is. A pressure with no shape yet &mdash; the itch, the daemon, the thing that will not let its maker sleep.</p>
+    <p>Every world you have ever lived inside started here: sealed, unreadable, and held by exactly one person.</p>
+  </article>
+
+  <article class="panel" data-in="0.150" data-out="0.245">
+    <div class="eyebrow">Wall II &middot; The Script</div>
+    <h2>The impulse gives up a <i>dimension</i></h2>
+    <p>To travel, it must flatten &mdash; into score, text, storyboard, blueprint. Benjamin&rsquo;s bargain: the work surrenders its aura, its unrepeatable here-and-now, and receives in exchange the ability to be carried by people who were never there.</p>
+  </article>
+
+  <article class="panel" data-in="0.245" data-out="0.340">
+    <div class="eyebrow">Wall III &middot; Time &amp; Place</div>
+    <h2>The aura is <i>repaid</i></h2>
+    <p>A room. A date. A threshold. A duration nobody can pause. The flat thing is re-embodied and becomes singular again: this night, these bodies, this weather.</p>
+    <p>A circle is drawn. Inside it different rules apply, and everyone present has agreed to them.</p>
+  </article>
+
+  <article class="panel" data-in="0.340" data-out="0.435">
+    <div class="eyebrow">Wall IV &middot; The Audience</div>
+    <h2>Without witness it is only <i>rehearsal</i></h2>
+    <p>The event is not finished on the stage. It is finished in the room, across the gap, in the second person.</p>
+    <p>Which means the work is never one thing. It is as many things as there are people holding it.</p>
+  </article>
+
+  <article class="panel" data-in="0.435" data-out="0.530">
+    <div class="eyebrow">Wall V &middot; The Exchange</div>
+    <h2>The membrane goes <i>permeable</i></h2>
+    <p>Spectators become participants and the ending stops being decided in advance. Boal called them spect-actors. We call it risk.</p>
+    <p>Once an audience can act, a script can hold the shape of a world. It can no longer hold the outcome.</p>
+  </article>
+
+  <article class="panel" data-in="0.530" data-out="0.635">
+    <div class="eyebrow">Wall VI &middot; Cult &rarr; Culture</div>
+    <h2>The play world <i>does not stop at the door</i></h2>
+    <p>The sixth wall is where a fiction stops being contained by the theatre and begins organising the street. <i>Cultus</i> &mdash; a thing tended &mdash; tended by enough people, for long enough, that it becomes the ground everyone else stands on.</p>
+    <p>Money, nation, market, faith. Every one of them was a play world that won.</p>
+  </article>
+
+  <article class="panel" data-in="0.635" data-out="0.705">
+    <div class="eyebrow">Sixth Wall Productions</div>
+    <h2>We work on the <i>sixth wall</i></h2>
+    <p>Most theatre stops at the third or the fourth. We build for the one past the exit &mdash; where people carry a world home and begin living inside it.</p>
+    <p>This is not a metaphor, and it is not an accident. It is a craft, and it can be practised on purpose.</p>
+  </article>
+
+  <article class="panel" data-in="0.705" data-out="0.790">
+    <div class="eyebrow">What we make &middot; 01</div>
+    <h2>Ritual <i>theatre</i></h2>
+    <p>Original works built as rites rather than shows. Threshold, ordeal, return &mdash; the dramaturgy of an actual transformation instead of a depiction of one.</p>
+    <p>You leave altered, or we have not finished the piece.</p>
+  </article>
+
+  <article class="panel" data-in="0.790" data-out="0.875">
+    <div class="eyebrow">What we make &middot; 02</div>
+    <h2>Immersive <i>worlds</i></h2>
+    <p>Environments an audience enters instead of observes. Every surface, sound, rule and role in service of one coherent world &mdash; built to stay coherent under the weight of real people improvising inside it.</p>
+  </article>
+
+  <article class="panel" data-in="0.875" data-out="0.945">
+    <div class="eyebrow">What we make &middot; 03</div>
+    <h2>Story <i>partnership</i></h2>
+    <p>For projects, movements and organisations already building something real. We find the myth already latent in the work and make it enterable &mdash; so the world you are trying to bring about can be felt by people before it exists.</p>
+  </article>
+</div>
+
+<div class="close" id="close">
+  <h2>A world is a play that<br><i>enough people kept performing</i>.</h2>
+  <a class="cta" href="mailto:hello@sixthwall.co">Tell us what world you're building</a>
+  <small>Sixth Wall Productions</small>
+</div>
+
+<div class="scroller" style="height:940vh"></div>
+
+<script>
+(function(){
+  const orbit  = document.getElementById('orbit');
+  const net    = document.getElementById('net');
+  const board  = document.getElementById('board');
+  const hero   = document.getElementById('hero');
+  const cue    = document.getElementById('cue');
+  const closeEl= document.getElementById('close');
+  const lattice= document.getElementById('lattice');
+  const panels = [...document.querySelectorAll('.panel')];
+  const ticks  = [...document.querySelectorAll('.rail i')];
+  const faces  = [...document.querySelectorAll('.face')]
+                   .sort((a,b)=> (+a.dataset.face) - (+b.dataset.face));
+
+  const S = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--S'));
+
+  /* ── geometry: lay out the cross net ── */
+  function layout(){
+    const s = S(), h = s/2;
+    const set = (id, left, top, origin) => {
+      const el = document.getElementById(id);
+      el.style.left = left + 'px'; el.style.top = top + 'px';
+      if(origin) el.style.transformOrigin = origin;
+    };
+    set('f-base',  -h,      -h);
+    set('f-north', -h,      -h - s, '50% 100%');
+    set('f-south', -h,       h,     '50% 0%');
+    set('f-west',  -h - s,  -h,     '100% 50%');
+    set('f-east',   h,      -h,     '0% 50%');
+    const lid = document.getElementById('f-lid');
+    lid.style.left = '0px'; lid.style.top = (-s) + 'px'; lid.style.transformOrigin = '50% 100%';
+  }
+  layout();
+
+  /* ── mini cubes, one per net cell ── */
+  const cells = [[0,0],[0,-1],[0,1],[-1,0],[1,0],[0,-2]]; // base, N, S, W, E, lid
+  const minis = cells.map(() => {
+    const c = document.createElement('div');
+    c.className = 'mini';
+    for(let i=0;i<6;i++) c.appendChild(document.createElement('div'));
+    net.appendChild(c);
+    return c;
+  });
+  function layoutMinis(){
+    const s = S(), m = s*0.34, k = m/2;
+    minis.forEach((c,i)=>{
+      c.style.left = (cells[i][0]*s - k) + 'px';
+      c.style.top  = (cells[i][1]*s - k) + 'px';
+      const t = ['rotateY(0deg)','rotateY(90deg)','rotateY(180deg)','rotateY(-90deg)','rotateX(90deg)','rotateX(-90deg)'];
+      [...c.children].forEach((f,j)=>{ f.style.transform = t[j] + ' translateZ(' + k + 'px)'; });
+    });
+  }
+  layoutMinis();
+
+  /* ── flower of life ── */
+  (function buildLattice(){
+    const r = 11, cx = 50, cy = 50, pts = [[0,0]];
+    for(let ring=1; ring<=2; ring++){
+      for(let i=0;i<6;i++){
+        const a = Math.PI/3*i;
+        for(let j=0;j<ring;j++){
+          const b = a + Math.PI/3*2;
+          pts.push([
+            ring*Math.cos(a)+j*Math.cos(b),
+            ring*Math.sin(a)+j*Math.sin(b)
+          ]);
+        }
+      }
+    }
+    const ns='http://www.w3.org/2000/svg';
+    pts.forEach(p=>{
+      const c=document.createElementNS(ns,'circle');
+      c.setAttribute('cx', cx + p[0]*r);
+      c.setAttribute('cy', cy + p[1]*r);
+      c.setAttribute('r', r);
+      lattice.appendChild(c);
+    });
+  })();
+
+  /* ── scroll engine ── */
+  const clamp=(v,a,b)=>v<a?a:v>b?b:v;
+  const seg=(p,a,b)=>clamp((p-a)/(b-a),0,1);
+  const easeIO=t=> t<.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2;
+  const easeOut=t=> 1-Math.pow(1-t,3);
+  const lerp=(a,b,t)=>a+(b-a)*t;
+
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let target=0, cur=0, t0=performance.now();
+
+  function onScroll(){
+    const max = document.documentElement.scrollHeight - innerHeight;
+    target = max>0 ? clamp(scrollY/max,0,1) : 0;
+  }
+  addEventListener('scroll', onScroll, {passive:true});
+  addEventListener('resize', ()=>{ layout(); layoutMinis(); onScroll(); });
+  onScroll(); cur = target;
+
+  /* unfold windows, one per flap */
+  const W = {
+    north:[0.150,0.222],
+    south:[0.245,0.317],
+    west: [0.340,0.412],
+    east: [0.435,0.507],
+    lid:  [0.530,0.602]
+  };
+  const el = {
+    north:document.getElementById('f-north'),
+    south:document.getElementById('f-south'),
+    west: document.getElementById('f-west'),
+    east: document.getElementById('f-east'),
+    lid:  document.getElementById('f-lid')
+  };
+  const closedAngle = { north:'rotateX', south:'rotateX', west:'rotateY', east:'rotateY', lid:'rotateX' };
+  const closedSign  = { north:-90, south:90, west:90, east:-90, lid:-90 };
+  const litWindow = [[0.045,0.150],[0.150,0.245],[0.245,0.340],[0.340,0.435],[0.435,0.530],[0.530,0.635]];
+
+  function render(p, time){
+    const t = time/1000;
+
+    /* flaps */
+    for(const k in W){
+      const open = easeIO(seg(p, W[k][0], W[k][1]));
+      const ang = closedSign[k] * (1-open);
+      el[k].style.transform = closedAngle[k] + '(' + ang.toFixed(2) + 'deg)';
+    }
+
+    /* orbit: tumble → tilt → face the viewer */
+    const settle  = easeIO(seg(p,0.04,0.20));
+    const unfold  = easeIO(seg(p,0.14,0.62));
+    const flatten = easeIO(seg(p,0.60,0.74));
+    const final   = easeIO(seg(p,0.90,1.00));
+
+    const drift = reduced ? 0 : t*5.5;
+    const yaw   = lerp(-24 + drift*0.9, 0, settle);
+    let tilt    = lerp(-16, -54, unfold);
+    tilt        = lerp(tilt, -9, flatten);
+    tilt        = lerp(tilt, 0, final);
+    const roll  = lerp(0, 26, unfold) + (reduced?0:t*0.5*final) + lerp(0,10,final);
+    const scale = lerp(1, 0.60, unfold) * lerp(1, 0.82, final);
+    const lift  = lerp(0, -40, easeOut(seg(p,0.60,0.80)));
+
+    orbit.style.transform =
+      'translateY(' + lift.toFixed(1) + 'px) scale(' + scale.toFixed(3) + ') ' +
+      'rotateX(' + tilt.toFixed(2) + 'deg) rotateY(' + yaw.toFixed(2) + 'deg) rotateZ(' + roll.toFixed(2) + 'deg)';
+
+    /* the board flashes in as the net completes, then recedes */
+    board.style.opacity = (0.11 * seg(p,0.60,0.68) * (1-seg(p,0.78,0.90))).toFixed(3);
+
+    /* faces light in sequence */
+    faces.forEach((f,i)=>{
+      const w = litWindow[i];
+      f.classList.toggle('lit', p>=w[0]-0.02 && p<w[1]+0.02);
+    });
+
+    /* mini cubes bloom out of each face */
+    minis.forEach((c,i)=>{
+      const a = seg(p, 0.575 + i*0.014, 0.655 + i*0.014);
+      const o = easeOut(a) * (1 - 0.45*seg(p,0.93,1));
+      c.style.opacity = o.toFixed(3);
+      const s = 0.2 + 0.8*easeOut(a);
+      const spin = reduced ? 0 : (t*9 + i*47);
+      c.style.transform = 'scale(' + s.toFixed(3) + ') rotateX(' + (spin*0.6).toFixed(1) + 'deg) rotateY(' + spin.toFixed(1) + 'deg)';
+    });
+
+    /* lattice */
+    const L = easeOut(seg(p,0.90,1.00));
+    lattice.style.opacity = (L*0.95).toFixed(3);
+    lattice.style.transform = 'scale(' + (0.72+0.28*L).toFixed(3) + ')';
+
+    /* copy */
+    const heroOut = seg(p,0.005,0.045);
+    hero.style.opacity = (1-heroOut).toFixed(3);
+    hero.style.transform = 'translateY(' + (-heroOut*26).toFixed(1) + 'px)';
+    cue.style.opacity = (1-seg(p,0.002,0.022)).toFixed(3);
+
+    panels.forEach(el=>{
+      const a = +el.dataset.in, b = +el.dataset.out;
+      const fi = seg(p, a, a+0.022), fo = 1 - seg(p, b-0.022, b);
+      const o = Math.min(fi,fo);
+      el.style.opacity = o.toFixed(3);
+      el.style.transform = 'translateY(' + (-50 + (1-fi)*3.5 - (1-fo)*3.5) + '%)';
+      el.style.visibility = o < 0.01 ? 'hidden' : 'visible';
+    });
+
+    closeEl.style.opacity = seg(p,0.955,0.995).toFixed(3);
+    closeEl.style.pointerEvents = p>0.97 ? 'auto' : 'none';
+
+    ticks.forEach((n,i)=>{
+      const w = litWindow[i];
+      n.classList.toggle('on', p>=w[0] && p<w[1]);
+    });
+  }
+
+  function frame(now){
+    cur += (target-cur) * (reduced ? 1 : 0.085);
+    if(Math.abs(target-cur) < 0.00008) cur = target;
+    render(cur, now-t0);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+/* Fixed UI that sits above the scene: masthead, chapter rail, scroll cue. */
+
+.masthead {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 26px clamp(20px, 5vw, 52px);
+  font-family: var(--util);
+  font-size: 10.5px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  /* Inverts against whatever passes beneath, so the wordmark stays legible
+     over both the black ground and the lit brass faces. */
+  mix-blend-mode: difference;
+}
+
+.mark {
+  color: var(--bone);
+}
+
+.mark b {
+  font-weight: 400;
+}
+
+.mark span {
+  opacity: 0.5;
+}
+
+.masthead a {
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.4s;
+}
+
+.masthead a:hover,
+.masthead a:focus-visible {
+  color: var(--bone);
+}
+
+/* Chapter rail — roman numerals tracking the six walls. */
+.rail {
+  position: fixed;
+  right: clamp(16px, 3.4vw, 40px);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: flex-end;
+  font-family: var(--util);
+  font-size: 9.5px;
+  letter-spacing: 0.22em;
+}
+
+.rail i {
+  font-style: normal;
+  color: var(--faint);
+  transition:
+    color 0.5s ease,
+    letter-spacing 0.5s ease;
+}
+
+.rail i.on {
+  color: var(--brass);
+  letter-spacing: 0.34em;
+}
+
+@media (max-width: 760px) {
+  .rail {
+    display: none;
+  }
+}
+
+.cue {
+  position: fixed;
+  bottom: 34px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  font-family: var(--util);
+  font-size: 9.5px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--faint);
+  pointer-events: none;
+}

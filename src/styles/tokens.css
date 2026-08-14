@@ -1,0 +1,34 @@
+/**
+ * Design tokens.
+ *
+ * The palette is deliberately narrow: near-black ground, bone type, one brass
+ * accent. Everything else is that brass at varying opacity. Add colours here
+ * rather than inline, so the whole site can be re-keyed from one file.
+ */
+:root {
+  /* ground */
+  --ink: #08080a;
+  --ink-lift: #101015;
+
+  /* type */
+  --bone: #e8e3d9;
+  --muted: rgba(232, 227, 217, 0.44);
+  --faint: rgba(232, 227, 217, 0.16);
+
+  /* accent */
+  --brass: #b98f3e;
+  --brass-dim: rgba(185, 143, 62, 0.34);
+
+  /* The edge length of one cube face. Drives the entire 3D net's geometry —
+     both the CSS layout and the measurements scene.ts reads back at runtime. */
+  --S: 210px;
+
+  --display: 'Cormorant Garamond', 'Times New Roman', serif;
+  --util: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+@media (max-width: 760px) {
+  :root {
+    --S: 132px;
+  }
+}

@@ -1,0 +1,193 @@
+/* Prose layers: opening titles, the railed scroll panels, the closing statement. */
+
+/* ── opening ── */
+.hero {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  will-change: opacity, transform;
+}
+
+.hero .wordmark {
+  font-family: var(--util);
+  font-weight: 300;
+  font-size: clamp(11px, 1.5vw, 14px);
+  letter-spacing: 0.62em;
+  text-transform: uppercase;
+  /* Balances the trailing letter-space so the lockup reads optically centred. */
+  text-indent: 0.62em;
+  color: var(--bone);
+}
+
+.hero .rule {
+  width: 52px;
+  height: 1px;
+  background: var(--brass-dim);
+  margin: 26px 0;
+}
+
+.hero .line {
+  font-size: clamp(21px, 2.7vw, 34px);
+  line-height: 1.36;
+  font-weight: 300;
+  max-width: 19ch;
+  color: rgba(232, 227, 217, 0.82);
+}
+
+.hero .line i {
+  font-style: italic;
+}
+
+/* ── scroll panels ── */
+.copy {
+  position: fixed;
+  z-index: 20;
+  pointer-events: none;
+  left: clamp(20px, 7vw, 96px);
+  top: 50%;
+  transform: translateY(-50%);
+  width: min(30ch, 34vw);
+}
+
+.panel {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+.eyebrow {
+  font-family: var(--util);
+  font-size: 10px;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: var(--brass);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.eyebrow::after {
+  content: '';
+  height: 1px;
+  flex: 1;
+  background: var(--brass-dim);
+}
+
+.panel h2 {
+  font-weight: 300;
+  font-size: clamp(30px, 3.5vw, 46px);
+  line-height: 1.06;
+  letter-spacing: -0.012em;
+  margin-bottom: 18px;
+}
+
+.panel h2 i {
+  font-style: italic;
+  color: rgba(232, 227, 217, 0.72);
+}
+
+.panel p {
+  font-size: clamp(16px, 1.24vw, 19px);
+  line-height: 1.62;
+  color: var(--muted);
+}
+
+.panel p + p {
+  margin-top: 14px;
+}
+
+/* ── closing ── */
+.close {
+  position: fixed;
+  inset: 0;
+  z-index: 22;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  opacity: 0;
+  will-change: opacity;
+}
+
+.close h2 {
+  font-size: clamp(28px, 4vw, 54px);
+  font-weight: 300;
+  line-height: 1.14;
+  max-width: 16ch;
+}
+
+.close h2 i {
+  font-style: italic;
+  color: var(--brass);
+}
+
+.close .cta {
+  pointer-events: auto;
+  margin-top: 34px;
+  font-family: var(--util);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--bone);
+  text-decoration: none;
+  border-bottom: 1px solid var(--brass-dim);
+  padding-bottom: 7px;
+  transition:
+    border-color 0.5s ease,
+    color 0.5s ease;
+}
+
+.close .cta:hover,
+.close .cta:focus-visible {
+  border-color: var(--brass);
+  color: var(--brass);
+}
+
+.close small {
+  display: block;
+  margin-top: 46px;
+  font-family: var(--util);
+  font-size: 9.5px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+@media (max-width: 760px) {
+  /* Panels drop out of the vertical centre and sit at the foot of the screen,
+     clear of the cube, which shifts up on small viewports. */
+  .copy {
+    left: 22px;
+    right: 22px;
+    width: auto;
+    top: auto;
+    bottom: 76px;
+    transform: none;
+  }
+
+  .panel {
+    top: auto;
+    bottom: 0;
+  }
+
+  .panel h2 {
+    font-size: 27px;
+  }
+
+  .panel p {
+    font-size: 15.5px;
+    line-height: 1.58;
+  }
+}
