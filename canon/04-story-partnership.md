@@ -153,16 +153,6 @@ every day as the main character in your own story and create beauty and
 participate. Not just encapsulated by your own world; we don't want people to
 just get their house in the hills and only live there." [T:384–386]
 
-## Individuals
-
-"The story partnerships can be institutional, or potentially the story of a
-very interesting individual's life, where their life is rich enough that it
-already has a story to be sculpted, like an organisation or an institution
-would. But that's really only for exceptional individuals that are ready to
-step into a protagonist role within the play of their own lives. Generally it's
-organisations. And I don't want to be a life coach. It's different than acting
-lessons." [T:368]
-
 ## What we learned from the meeting that went wrong
 
 Kept without names, because the lesson is structural:
