@@ -92,6 +92,34 @@
   color: var(--brass);
 }
 
+/* The five extra walls that turn each cell of the net into a cube for the
+   finale, and the two cells that are nothing but walls. Dimmer than the
+   numbered face on purpose: the face stays the subject, the depth is a
+   consequence. scene.ts writes their transforms and opacity per frame — at
+   depth zero they are scaled to nothing, so they cost nothing to leave in
+   place from the first frame. */
+.cell {
+  position: absolute;
+  width: var(--S);
+  height: var(--S);
+  transform-style: preserve-3d;
+}
+
+.wall {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: linear-gradient(
+    158deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.014) 46%,
+    rgba(255, 255, 255, 0.032) 100%
+  );
+  border: 1px solid rgba(185, 143, 62, 0.2);
+  box-shadow: inset 0 0 40px rgba(255, 255, 255, 0.02);
+  backface-visibility: visible;
+}
+
 /* Checkered floor beneath the net, masked to a soft disc. */
 .board {
   position: absolute;

@@ -119,6 +119,10 @@
   text-align: center;
   opacity: 0;
   will-change: opacity;
+  /* Sits the statement below the centre line, so it reads in front of the
+     shaft of the finished cross rather than across its arms. Half of this
+     becomes the downward shift — the block is still centred in what is left. */
+  padding-top: 12vh;
 }
 
 .close h2 {
@@ -166,6 +170,12 @@
 }
 
 @media (max-width: 760px) {
+  /* On a narrow screen the cross clears the statement on its own, so the
+     nudge that keeps them apart on desktop would only strand the copy. */
+  .close {
+    padding-top: 3vh;
+  }
+
   /* Panels drop out of the vertical centre and sit at the foot of the screen,
      clear of the cube, which shifts up on small viewports. */
   .copy {

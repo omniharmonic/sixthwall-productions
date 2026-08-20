@@ -5,13 +5,17 @@
  * moving property is a pure function of it, so the page is fully scrubbable
  * and holds no animation state of its own between frames.
  *
+ * The one thing that is *not* a function of `p` is the idle sway, which is a
+ * function of elapsed time. It is deliberately bounded — see `sway()` in
+ * easing.ts for why an unbounded one is a bug and not a style choice.
+ *
  * Constants come from src/config/choreography.ts. Per-panel timings come off
  * the DOM (data-in / data-out / data-face), which is how the copy, the cube
  * faces and the chapter rail stay welded to one set of numbers authored in
  * src/content/panels/*.md.
  */
 import { choreography as C } from '../config/choreography';
-import { clamp, segment, easeInOut, easeOut, lerp } from './easing';
+import { clamp, segment, easeInOut, easeOut, lerp, sway } from './easing';
 
 type FlapName = keyof typeof C.flaps;
 
@@ -21,11 +25,47 @@ interface PanelTiming {
   out: number;
 }
 
+/**
+ * One cell of the net: a face of the cube, and the five extra walls that turn
+ * that face into a cube of its own at the finale.
+ *
+ * `ring` is the number of cells between this one and the crossing, which is
+ * what staggers the extrusion into a ripple travelling outward along the cross.
+ */
+interface Cell {
+  element: HTMLElement;
+  column: number;
+  row: number;
+  ring: number;
+  walls: HTMLElement[];
+}
+
 function must<T extends Element>(selector: string, within: ParentNode = document): T {
   const element = within.querySelector<T>(selector);
   if (!element) throw new Error(`scene.ts: expected to find "${selector}" in the document.`);
   return element;
 }
+
+/**
+ * The net, as an upright Latin cross: the crossing, its four neighbours, and
+ * the lid hanging one cell further south to make the foot.
+ *
+ * These positions are the cross *and* the hypercube. Fold them and they are a
+ * cube; extrude them and they are six of the eight cells of a hypercube net.
+ */
+const NET_CELLS = [
+  { id: 'f-base', column: 0, row: 0, ring: 0, origin: '' },
+  { id: 'f-north', column: 0, row: -1, ring: 1, origin: '50% 100%' },
+  { id: 'f-south', column: 0, row: 1, ring: 1, origin: '50% 0%' },
+  { id: 'f-west', column: -1, row: 0, ring: 1, origin: '100% 50%' },
+  { id: 'f-east', column: 1, row: 0, ring: 1, origin: '0% 50%' },
+  /* Parented to the south flap, so folding the south flap carries it. Its
+     left/top are therefore relative to that flap, not to the net. */
+  { id: 'f-lid', column: 0, row: 2, ring: 2, origin: '50% 0%' },
+] as const;
+
+/** Walls in the order `extrude()` writes them. The face is the sixth, the front. */
+const WALL_COUNT = 5;
 
 export function mountScene(): void {
   const orbit = must<HTMLElement>('#orbit');
@@ -75,49 +115,85 @@ export function mountScene(): void {
 
   /* ── geometry ───────────────────────────────────────────────────────── */
 
-  /** Current face edge, read from CSS so JS and the breakpoint never disagree. */
-  const edge = (): number =>
-    parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--S'));
+  /**
+   * Current face edge. Read from CSS so JS and the breakpoint never disagree,
+   * but cached: the render loop needs it every frame and getComputedStyle in a
+   * rAF callback forces a layout flush.
+   */
+  let edge = 0;
+  /** The orbit's own y within the frame, which the breakpoint also moves. */
+  let originY = 0;
+  const measure = (): void => {
+    edge = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--S'));
+    originY = orbit.offsetTop;
+  };
+
+  /** Adds the walls that let a cell be extruded from a square into a cube. */
+  const addWalls = (host: HTMLElement, count: number): HTMLElement[] =>
+    Array.from({ length: count }, () => {
+      const wall = document.createElement('div');
+      wall.className = 'wall';
+      host.appendChild(wall);
+      return wall;
+    });
+
+  const cells: Cell[] = NET_CELLS.map((spec) => {
+    const element = must<HTMLElement>(`#${spec.id}`);
+    return { element, column: spec.column, row: spec.row, ring: spec.ring, walls: addWalls(element, WALL_COUNT) };
+  });
 
   /**
-   * Lays the net out as a cross: a base square, four flaps around it, and the
-   * lid hinged off the far edge of the north flap. Transform origins are the
-   * hinge lines, which is what lets a single rotation fold each flap up.
+   * The two cells that exist only in four dimensions.
+   *
+   * Six cubes make the cross you can see; the hypercube's other two sit on the
+   * front and back faces of the crossing — the only two directions a flat net
+   * has left. They have no face of their own, so they are six walls and
+   * nothing else, and they are built here rather than in the markup because
+   * they are not part of the cube.
+   */
+  const makeCrossingCell = (): HTMLElement => {
+    const element = document.createElement('div');
+    element.className = 'cell';
+    net.appendChild(element);
+    return element;
+  };
+
+  const crossing = [makeCrossingCell(), makeCrossingCell()].map((element) => ({
+    element,
+    walls: addWalls(element, WALL_COUNT + 1),
+  }));
+
+  /**
+   * Lays the net out as a cross: a crossing square, four flaps around it, and
+   * the lid hinged off the far edge of the south flap. Transform origins are
+   * the hinge lines, which is what lets a single rotation fold each flap up.
    */
   function layoutNet(): void {
-    const s = edge();
-    const half = s / 2;
+    const half = edge / 2;
 
-    const place = (id: string, left: number, top: number, origin?: string): void => {
-      const element = must<HTMLElement>(`#${id}`);
-      element.style.left = `${left}px`;
-      element.style.top = `${top}px`;
-      if (origin) element.style.transformOrigin = origin;
-    };
+    for (const spec of NET_CELLS) {
+      const element = must<HTMLElement>(`#${spec.id}`);
 
-    place('f-base', -half, -half);
-    place('f-north', -half, -half - s, '50% 100%');
-    place('f-south', -half, half, '50% 0%');
-    place('f-west', -half - s, -half, '100% 50%');
-    place('f-east', half, -half, '0% 50%');
+      if (spec.id === 'f-lid') {
+        /* Relative to the south flap it hangs from, not to the net. */
+        element.style.left = '0px';
+        element.style.top = `${edge}px`;
+      } else {
+        element.style.left = `${spec.column * edge - half}px`;
+        element.style.top = `${spec.row * edge - half}px`;
+      }
 
-    const lid = must<HTMLElement>('#f-lid');
-    lid.style.left = '0px';
-    lid.style.top = `${-s}px`;
-    lid.style.transformOrigin = '50% 100%';
+      if (spec.origin) element.style.transformOrigin = spec.origin;
+    }
+
+    /* The crossing pair share the crossing's own footprint. */
+    for (const { element } of crossing) {
+      element.style.left = `${-half}px`;
+      element.style.top = `${-half}px`;
+    }
   }
 
-  /** Grid position of each net cell: base, north, south, west, east, lid. */
-  const cells: Array<[number, number]> = [
-    [0, 0],
-    [0, -1],
-    [0, 1],
-    [-1, 0],
-    [1, 0],
-    [0, -2],
-  ];
-
-  /** One mini cube per cell, six faces each. */
+  /** One mini cube per cell of the net, six faces each. */
   const minis = cells.map(() => {
     const cube = document.createElement('div');
     cube.className = 'mini';
@@ -136,18 +212,48 @@ export function mountScene(): void {
   ];
 
   function layoutMinis(): void {
-    const s = edge();
-    const size = s * 0.34;
+    const size = edge * 0.34;
     const halfSize = size / 2;
 
     minis.forEach((cube, index) => {
-      const [column, row] = cells[index]!;
-      cube.style.left = `${column * s - halfSize}px`;
-      cube.style.top = `${row * s - halfSize}px`;
+      const cell = cells[index]!;
+      cube.style.left = `${cell.column * edge - halfSize}px`;
+      cube.style.top = `${cell.row * edge - halfSize}px`;
       [...cube.children].forEach((face, faceIndex) => {
         (face as HTMLElement).style.transform =
           `${MINI_FACE_ROTATIONS[faceIndex]} translateZ(${halfSize}px)`;
       });
+    });
+  }
+
+  /**
+   * Positions the walls of one cell for a given depth.
+   *
+   * The cell's front sits at `frontZ` and the box extrudes back from there, so
+   * a net cell keeps its numbered face exactly where it has been all along and
+   * grows away from the viewer. At depth 0 the side walls scale to nothing and
+   * the back wall lies on the front, so the cell reads as the flat square it
+   * was: the finale can therefore run on geometry that is present from the
+   * first frame.
+   */
+  function extrude(walls: HTMLElement[], depth: number, frontZ: number, opacity: number): void {
+    const k = depth / edge;
+    const half = edge / 2;
+    const mid = (frontZ - depth / 2).toFixed(2);
+
+    const transforms = [
+      `translateZ(${(frontZ - depth).toFixed(2)}px)`,
+      `translateX(${half}px) translateZ(${mid}px) rotateY(90deg) scaleX(${k.toFixed(4)})`,
+      `translateX(${-half}px) translateZ(${mid}px) rotateY(-90deg) scaleX(${k.toFixed(4)})`,
+      `translateY(${-half}px) translateZ(${mid}px) rotateX(90deg) scaleY(${k.toFixed(4)})`,
+      `translateY(${half}px) translateZ(${mid}px) rotateX(-90deg) scaleY(${k.toFixed(4)})`,
+      `translateZ(${frontZ.toFixed(2)}px)`,
+    ];
+
+    const alpha = opacity.toFixed(3);
+    walls.forEach((wall, index) => {
+      wall.style.transform = transforms[index]!;
+      wall.style.opacity = alpha;
     });
   }
 
@@ -183,6 +289,7 @@ export function mountScene(): void {
     }
   }
 
+  measure();
   layoutNet();
   layoutMinis();
   buildLattice();
@@ -210,31 +317,48 @@ export function mountScene(): void {
       flaps[name].style.transform = `${axis}(${(closed * (1 - open)).toFixed(2)}deg)`;
     }
 
-    /* camera: tumble in → tilt back as the net opens → face the viewer */
+    /* camera: tumble in → tilt back as the net opens → stand the cross up */
     const { orbit: O } = C;
     const settle = easeInOut(segment(p, ...O.settle));
     const unfold = easeInOut(segment(p, ...O.unfold));
     const flatten = easeInOut(segment(p, ...O.flatten));
     const final = easeInOut(segment(p, ...O.final));
 
-    const drift = reducedMotion ? 0 : t * O.driftRate;
-    const yaw = lerp(O.yaw.from + drift * O.yaw.driftFactor, O.yaw.to, settle);
+    /**
+     * Idle sway, bounded and detuned across the two axes so the pose never
+     * quite repeats. It is faded out by `settle` rather than accumulated into
+     * the pose, so the most it can ever cost the visitor on their first scroll
+     * is its own amplitude — however long the page has been sitting there.
+     */
+    const idling = reducedMotion ? 0 : 1 - settle;
+    const swayYaw = sway(t, O.idle.periodSec) * O.idle.yawDeg * idling;
+    const swayTilt = sway(t, O.idle.periodSec * 1.618) * O.idle.tiltDeg * idling;
+
+    let yaw = lerp(O.yaw.start, O.yaw.settled, settle);
+    yaw = lerp(yaw, O.yaw.final, final);
 
     let tilt = lerp(O.tilt.start, O.tilt.unfolded, unfold);
     tilt = lerp(tilt, O.tilt.flattened, flatten);
     tilt = lerp(tilt, O.tilt.final, final);
 
-    const roll =
-      lerp(0, O.roll.onUnfold, unfold) +
-      (reducedMotion ? 0 : t * O.roll.spinRate * final) +
-      lerp(0, O.roll.onFinal, final);
+    let roll = lerp(O.roll.start, O.roll.unfolded, unfold);
+    roll = lerp(roll, O.roll.final, final);
 
     const scale = lerp(1, O.scale.onUnfold, unfold) * lerp(1, O.scale.onFinal, final);
-    const lift = lerp(0, O.liftPx, easeOut(segment(p, ...O.lift)));
+    /* The finale raises the cross clear of the closing statement — but only
+       as far as the frame allows. A short window has no headroom to give, and
+       an unclamped lift slides the head of the cross under the masthead. The
+       head sits one and a half cells above the crossing. */
+    const wantedLift =
+      lerp(0, O.liftPx, easeOut(segment(p, ...O.lift))) +
+      lerp(0, O.finalLiftEdges * edge, final);
+    const lowestLift = -Math.max(0, originY - 1.5 * edge * scale - O.headroomPx);
+    const lift = Math.max(wantedLift, lowestLift);
 
     orbit.style.transform =
       `translateY(${lift.toFixed(1)}px) scale(${scale.toFixed(3)}) ` +
-      `rotateX(${tilt.toFixed(2)}deg) rotateY(${yaw.toFixed(2)}deg) rotateZ(${roll.toFixed(2)}deg)`;
+      `rotateX(${(tilt + swayTilt).toFixed(2)}deg) rotateY(${(yaw + swayYaw).toFixed(2)}deg) ` +
+      `rotateZ(${roll.toFixed(2)}deg)`;
 
     /* the board flashes in as the net completes, then recedes */
     board.style.opacity = (
@@ -251,19 +375,43 @@ export function mountScene(): void {
       face.classList.toggle('lit', p >= window[0] - bleed && p < window[1] + bleed);
     });
 
-    /* mini cubes bloom out of each cell, staggered */
+    /* mini cubes bloom out of each cell, staggered, then dissolve into the
+       real cubes the cells become */
     const { minis: M } = C;
+    const dissolved = segment(p, ...M.fadeOut);
     minis.forEach((cube, index) => {
       const offset = index * M.stagger;
       const bloom = easeOut(segment(p, M.bloom[0] + offset, M.bloom[1] + offset));
-      const opacity = bloom * (1 - M.fadeAmount * segment(p, ...M.fadeOut));
       const size = lerp(M.scale.from, M.scale.to, bloom);
-      const spin = reducedMotion ? 0 : t * M.spinRate + index * M.spinOffset;
+      const phase = t + index * M.phaseOffset * M.tumble.periodSec;
+      const tumble = reducedMotion ? 0 : sway(phase, M.tumble.periodSec) * M.tumble.deg;
+      const pitch = reducedMotion ? 0 : sway(phase, M.tumble.periodSec * 1.618) * M.tumble.deg * 0.6;
 
-      cube.style.opacity = opacity.toFixed(3);
+      cube.style.opacity = (bloom * (1 - dissolved)).toFixed(3);
       cube.style.transform =
-        `scale(${size.toFixed(3)}) rotateX(${(spin * 0.6).toFixed(1)}deg) rotateY(${spin.toFixed(1)}deg)`;
+        `scale(${size.toFixed(3)}) rotateX(${pitch.toFixed(1)}deg) rotateY(${tumble.toFixed(1)}deg)`;
     });
+
+    /* the finale: each cell of the net gains depth, the ripple travelling out
+       from the crossing, and the hypercube's last two cells bud off its face */
+    const { hypercube: H } = C;
+    const fullDepth = edge * H.depth;
+    let crossingDepth = 0;
+
+    for (const cell of cells) {
+      const offset = cell.ring * H.stagger;
+      const grown = easeInOut(segment(p, H.extrude[0] + offset, H.extrude[1] + offset));
+      if (cell.ring === 0) crossingDepth = fullDepth * grown;
+      extrude(cell.walls, fullDepth * grown, 0, Math.min(1, grown * 5));
+    }
+
+    const budded = easeInOut(segment(p, ...H.crossing));
+    const budDepth = fullDepth * budded;
+    const budAlpha = Math.min(1, budded * 5);
+    /* forward, out of the crossing's front face — the cube Dalí hangs a body
+       in front of — and backward, out of its back face */
+    extrude(crossing[0]!.walls, budDepth, budDepth, budAlpha);
+    extrude(crossing[1]!.walls, budDepth, -crossingDepth, budAlpha);
 
     /* lattice resolves last */
     const latticeIn = easeOut(segment(p, ...C.lattice.reveal));
@@ -310,6 +458,7 @@ export function mountScene(): void {
 
   addEventListener('scroll', readScroll, { passive: true });
   addEventListener('resize', () => {
+    measure();
     layoutNet();
     layoutMinis();
     readScroll();

@@ -18,3 +18,18 @@ export const easeInOut = (t: number): number =>
 export const easeOut = (t: number): number => 1 - Math.pow(1 - t, 3);
 
 export const lerp = (from: number, to: number, t: number): number => from + (to - from) * t;
+
+/**
+ * A bounded idle oscillation over `periodSec`, in [-1, 1].
+ *
+ * Idle motion must never be an unbounded accumulation of elapsed time. The
+ * scroll timeline blends idle motion *away* as the visitor engages, and the
+ * size of that blend is the size of the idle offset — so an accumulator that
+ * grows without limit produces a correction that grows without limit.
+ *
+ * That was the "cube spins wildly if the page has been sitting" bug: yaw
+ * drifted at 4.95°/s forever, and the first 20% of the scroll had to unwind
+ * all of it. Sway instead of drift, and the worst case is the amplitude.
+ */
+export const sway = (seconds: number, periodSec: number): number =>
+  Math.sin((seconds / periodSec) * Math.PI * 2);

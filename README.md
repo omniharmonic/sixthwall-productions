@@ -5,7 +5,9 @@ The public site for Sixth Wall Productions — ritual theatre, immersive worlds,
 **Live:** <https://sixthwall.productions>
 
 A single-page scroll narrative: a cube net unfolds through six walls as the copy
-advances, resolving into a flower-of-life lattice.
+advances, then every face of the open cross gains depth — the six squares become
+eight cubes, the unfolded hypercube of Dalí's *Corpus Hypercubus*, standing
+upright against a flower-of-life lattice.
 
 | Opening | Mid-unfold | Finale |
 | --- | --- | --- |
@@ -43,6 +45,7 @@ scroll position ──► p (0…1) ──► render(p)
                                   ├─ camera tilts / scales
                                   ├─ faces light
                                   ├─ copy panels cross-fade
+                                  ├─ faces extrude into the hypercube cross
                                   └─ lattice resolves
 ```
 

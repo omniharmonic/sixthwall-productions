@@ -38,13 +38,19 @@ export const choreography = {
     lid: [0.53, 0.602],
   } satisfies Record<string, Window>,
 
-  /** Which axis each flap rotates on, and its closed angle in degrees. */
+  /**
+   * Which axis each flap rotates on, and its closed angle in degrees.
+   *
+   * The lid hinges off the *south* flap, which is what makes the open net an
+   * upright Latin cross — one cell above the crossing, two below — rather than
+   * that cross stood on its head. See the hypercube note below.
+   */
   flapAxis: {
     north: { axis: 'rotateX', closed: -90 },
     south: { axis: 'rotateX', closed: 90 },
     west: { axis: 'rotateY', closed: 90 },
     east: { axis: 'rotateY', closed: -90 },
-    lid: { axis: 'rotateX', closed: -90 },
+    lid: { axis: 'rotateX', closed: 90 },
   },
 
   /** The camera move: tumble in, tilt back as it unfolds, then face the viewer. */
@@ -52,18 +58,47 @@ export const choreography = {
     settle: [0.04, 0.2] as Window,
     unfold: [0.14, 0.62] as Window,
     flatten: [0.6, 0.74] as Window,
-    final: [0.9, 1.0] as Window,
+    /* Overlaps the extrusion below on purpose: the cross standing upright and
+       the faces gaining depth are one move, not two. */
+    final: [0.845, 0.985] as Window,
     lift: [0.6, 0.8] as Window,
 
-    /** Idle rotation, degrees/sec. Suppressed under prefers-reduced-motion. */
-    driftRate: 5.5,
+    /**
+     * Idle motion while the page waits at the top: a slow bounded sway, not a
+     * drift. Amplitude in degrees, period in seconds; the two axes are detuned
+     * against each other in scene.ts so the pose never repeats exactly.
+     *
+     * Amplitude is the whole safety property here. Scroll blends this away, so
+     * whatever is written here is the most the cube can ever have to unwind
+     * when the visitor starts scrolling. Keep it small. Suppressed under
+     * prefers-reduced-motion.
+     */
+    idle: { yawDeg: 8, tiltDeg: 2.4, periodSec: 21 },
 
-    yaw: { from: -24, to: 0, driftFactor: 0.9 },
-    /** Tilt is lerped through these in order: start → unfolded → flat → head-on. */
-    tilt: { start: -16, unfolded: -54, flattened: -9, final: 0 },
-    roll: { onUnfold: 26, onFinal: 10, spinRate: 0.5 },
-    scale: { onUnfold: 0.6, onFinal: 0.82 },
+    /* Each pose is lerped through its stages in order. Every stage ends at a
+       value written here, so the final frame is the same frame every time. */
+    yaw: { start: -24, settled: 0, final: -15 },
+    tilt: { start: -16, unfolded: -54, flattened: -9, final: -8 },
+    roll: { start: 0, unfolded: 26, final: 0 },
+    scale: { onUnfold: 0.6, onFinal: 0.83 },
     liftPx: -40,
+    /**
+     * Extra lift at the finale, in face edges rather than pixels.
+     *
+     * The cross hangs two cells below its crossing and one above, so left
+     * where it is it sits low and its crossbar cuts through the closing
+     * statement. Raised, the arms clear the copy and the shaft runs down
+     * behind it. In *edges* because the correction is a fact about the
+     * cross's geometry, and the edge shrinks at the mobile breakpoint — a
+     * pixel constant here lifts the small cross into the masthead.
+     */
+    finalLiftEdges: -0.72,
+    /**
+     * Clearance kept between the head of the risen cross and the top of the
+     * frame. The lift above is what the composition wants; this is what the
+     * window can actually give, and on a short viewport it wins.
+     */
+    headroomPx: 50,
   },
 
   /** The checkered floor that flashes in as the net completes, then recedes. */
@@ -73,17 +108,43 @@ export const choreography = {
     peakOpacity: 0.11,
   },
 
-  /** Mini cubes blooming out of each net cell, staggered. */
+  /**
+   * Mini cubes blooming out of each net cell, staggered.
+   *
+   * They are a promise the finale keeps: a small cube appears in every cell,
+   * and then the cell itself becomes one. They dissolve as that happens, so
+   * the two motifs cross-fade rather than sit inside one another.
+   */
   minis: {
     bloom: [0.575, 0.655] as Window,
     /** Added to both ends of `bloom` per cube index, for the cascade. */
     stagger: 0.014,
-    fadeOut: [0.93, 1.0] as Window,
-    fadeAmount: 0.45,
+    fadeOut: [0.775, 0.85] as Window,
     scale: { from: 0.2, to: 1.0 },
-    spinRate: 9,
-    /** Degrees of phase offset per cube, so they never spin in lockstep. */
-    spinOffset: 47,
+    /** Bounded tumble, as for the orbit: degrees of amplitude, seconds/cycle. */
+    tumble: { deg: 24, periodSec: 8 },
+    /** Cycles of phase offset per cube, so they never tumble in lockstep. */
+    phaseOffset: 0.37,
+  },
+
+  /**
+   * The finale: every cell of the net gains depth, and the cross of six
+   * squares becomes a cross of cubes — the unfolded hypercube of Dalí's
+   * *Corpus Hypercubus*.
+   *
+   * A cube net is six squares; a hypercube net is eight cubes. The six come
+   * from the faces we already have. The other two sit on the front and back
+   * of the crossing cell — the only two directions a flat net has left — and
+   * so they cannot exist until the crossing has depth to grow out of.
+   */
+  hypercube: {
+    extrude: [0.815, 0.93] as Window,
+    /** Added to both ends of `extrude` per ring of cells out from the crossing. */
+    stagger: 0.017,
+    /** The pair budding off the crossing's own two faces. */
+    crossing: [0.855, 0.965] as Window,
+    /** Depth of a finished cell, as a fraction of the face edge. 1 = a cube. */
+    depth: 1,
   },
 
   /** Flower-of-life lattice, the final image. */

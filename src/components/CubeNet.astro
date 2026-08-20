@@ -1,11 +1,15 @@
 ---
 /**
- * The cube net, laid out as a cross.
+ * The cube net, laid out as an upright cross.
  *
- * Markup only establishes the hierarchy — the lid is nested inside the north
- * flap so that folding the north flap carries the lid with it. All positions,
- * transform origins, the mini cubes and the lattice circles are set by
- * scene.ts, which reads the face edge from the --S custom property.
+ * Markup only establishes the hierarchy — the lid is nested inside the south
+ * flap so that folding the south flap carries the lid with it. All positions,
+ * transform origins, the extra walls, the mini cubes and the lattice circles
+ * are set by scene.ts, which reads the face edge from the --S custom property.
+ *
+ * The lid hangs south rather than north on purpose: it puts one cell above the
+ * crossing and two below, which is the shape the finale needs. See the
+ * hypercube note in src/config/choreography.ts.
  *
  * Faces carry data-face 0-5, matching the `face` field in the wall panels.
  */
@@ -23,16 +27,16 @@ const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI'];
           <div class="face" data-face="0"><em>{NUMERALS[0]}</em></div>
         </div>
 
-        {/* north · Wall II — carries the lid · Wall VI */}
         <div class="flap" id="f-north">
           <div class="face" data-face="1"><em>{NUMERALS[1]}</em></div>
+        </div>
+
+        {/* south · Wall III — carries the lid · Wall VI, the foot of the cross */}
+        <div class="flap" id="f-south">
+          <div class="face" data-face="2"><em>{NUMERALS[2]}</em></div>
           <div class="flap" id="f-lid">
             <div class="face" data-face="5"><em>{NUMERALS[5]}</em></div>
           </div>
-        </div>
-
-        <div class="flap" id="f-south">
-          <div class="face" data-face="2"><em>{NUMERALS[2]}</em></div>
         </div>
         <div class="flap" id="f-west">
           <div class="face" data-face="3"><em>{NUMERALS[3]}</em></div>

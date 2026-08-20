@@ -21,6 +21,15 @@ in three places.
 
 **Animation constants belong in `src/config/choreography.ts`.** If you find
 yourself typing a decimal into `scene.ts`, it probably belongs there instead.
+Distances that describe the net's own geometry go in face edges, not pixels —
+`--S` halves at the mobile breakpoint, so a pixel constant silently means
+something different on a phone.
+
+**Idle motion must be bounded.** Anything driven by elapsed time rather than by
+`p` has to be a `sway()`, never an accumulator. The scroll timeline blends idle
+motion away as the visitor engages, so an unbounded one makes the cube unwind
+everything it accumulated the moment you touch the wheel — 40 seconds of idling
+used to cost a 224° spin at 400°/s. See the note on `sway()` in `easing.ts`.
 
 **The canonical hostname appears in three places** and they must agree:
 `public/CNAME`, `site.url` in `src/config/site.ts`, and the GitHub Pages custom
@@ -51,5 +60,6 @@ window.scrollTo(0, max * 0.40);          // jump to p = 0.40
 ```
 
 Scroll input is smoothed (`choreography.smoothing`), so values need a second or
-two to converge after a programmatic jump. The idle drift also accumulates with
-elapsed time — reload before comparing screenshots of the opening pose.
+two to converge after a programmatic jump. The opening pose also carries a slow
+idle sway, so it is only reproducible to within `orbit.idle` — compare
+screenshots under `prefers-reduced-motion`, which zeroes it.
