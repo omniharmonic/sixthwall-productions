@@ -25,16 +25,6 @@ Places where people already gather to become more themselves. A bathhouse, becau
 
 Not places that already have a complete path; a yoga studio has its sutras and does not need our rails. Not industries whose frame we would have to pretend to believe. We are not going to build a mystery school inside an oil company. Business partnership is the land of selling out — people go there to sell out; that is what it is for — and the conditions under which it is possible to go there and not sell out are narrow and specific. We know what they are, and we check.
 
-## What we say no to
-
-Owning a category. Becoming the hub that everything passes through. Growing the pie for everyone, warmly described. Language of that kind is a tell, and we have learned to hear it early. We are interested in toroidal structures — what comes in goes back out, changed — and not in funnels.
-
-We will also say no if the myth is not actually there. Not everything has one. A story laid on top of a thing that does not want it is a lie with good production values, and we would rather tell you than build it.
-
-## Individuals
-
-Almost always this is institutional. Occasionally a person's life is already rich enough that it has a story to be sculpted, and that person is ready to step into the protagonist role in the play of their own life without flinching and with integrity. That is rare. It is not coaching. We will know within an hour.
-
 ## How it begins
 
 Tell us what world you are building. Not the pitch — the world. What it looks like from inside, who lives there, what they do on an ordinary Tuesday. If there is a myth in it we will find it on the first call, and if there is not we will say so on the first call, and either way you will leave knowing something about the thing you are making that you did not know when you arrived.
