@@ -11,6 +11,8 @@ A stage is a cube. Three walls and a floor the players can see; a fourth, invisi
 
 We count differently. We count from the inside out, beginning before there is any room at all, and we keep counting past the ceiling. A wall, for us, is not a surface. It is a threshold a story has to cross on its way from one person's interior to the common world. Each threshold costs something. Each returns something. The order cannot be skipped.
 
+Read one way, these are the stages a production passes through. Read the other way, they are the anatomy of how anything comes to be at all: a wholeness that wants to see itself, speaks, makes a world, splits into seer and seen, closes the split, and dies into the next. We mean both readings. A sixth-walled production recapitulates creation, which is why it can do what it does to a room.
+
 Here they are.
 
 ## I · The Spark

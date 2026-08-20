@@ -18,7 +18,7 @@ export type Window = readonly [start: number, end: number];
 
 export const choreography = {
   /** Total scrollable length. More height = slower, more deliberate pacing. */
-  scrollLength: '940vh',
+  scrollLength: '1180vh',
 
   /** How hard scroll input is smoothed. Lower = heavier, more cinematic lag. */
   smoothing: 0.085,
@@ -31,11 +31,11 @@ export const choreography = {
    * net: four flaps around a base, plus a lid hinged off the north flap.
    */
   flaps: {
-    north: [0.15, 0.222],
-    south: [0.245, 0.317],
-    west: [0.34, 0.412],
-    east: [0.435, 0.507],
-    lid: [0.53, 0.602],
+    north: [0.1286, 0.186],
+    south: [0.2043, 0.2617],
+    west: [0.28, 0.3374],
+    east: [0.3557, 0.413],
+    lid: [0.4314, 0.4887],
   } satisfies Record<string, Window>,
 
   /**
@@ -55,13 +55,13 @@ export const choreography = {
 
   /** The camera move: tumble in, tilt back as it unfolds, then face the viewer. */
   orbit: {
-    settle: [0.04, 0.2] as Window,
-    unfold: [0.14, 0.62] as Window,
-    flatten: [0.6, 0.74] as Window,
+    settle: [0.04, 0.1685] as Window,
+    unfold: [0.1207, 0.5031] as Window,
+    flatten: [0.4871, 0.6545] as Window,
     /* Overlaps the extrusion below on purpose: the cross standing upright and
        the faces gaining depth are one move, not two. */
-    final: [0.845, 0.985] as Window,
-    lift: [0.6, 0.8] as Window,
+    final: [0.794, 0.9801] as Window,
+    lift: [0.4871, 0.7342] as Window,
 
     /**
      * Idle motion while the page waits at the top: a slow bounded sway, not a
@@ -103,8 +103,8 @@ export const choreography = {
 
   /** The checkered floor that flashes in as the net completes, then recedes. */
   board: {
-    in: [0.6, 0.68] as Window,
-    out: [0.78, 0.9] as Window,
+    in: [0.4871, 0.5748] as Window,
+    out: [0.7077, 0.8671] as Window,
     peakOpacity: 0.11,
   },
 
@@ -119,18 +119,18 @@ export const choreography = {
    * so they cannot exist until the crossing has depth to grow out of.
    */
   hypercube: {
-    extrude: [0.815, 0.93] as Window,
+    extrude: [0.7542, 0.907] as Window,
     /** Added to both ends of `extrude` per ring of cells out from the crossing. */
-    stagger: 0.017,
+    stagger: 0.022,
     /** The pair budding off the crossing's own two faces. */
-    crossing: [0.855, 0.965] as Window,
+    crossing: [0.8073, 0.9535] as Window,
     /** Depth of a finished cell, as a fraction of the face edge. 1 = a cube. */
     depth: 1,
   },
 
   /** Flower-of-life lattice, the final image. */
   lattice: {
-    reveal: [0.9, 1.0] as Window,
+    reveal: [0.8671, 1] as Window,
     peakOpacity: 0.95,
     scale: { from: 0.72, to: 1.0 },
     /** Rings of circles around the centre. 2 = 19 circles. */
@@ -151,7 +151,7 @@ export const choreography = {
 
   /** Copy panels: how long each cross-fades, and how far it drifts while doing so. */
   panels: {
-    fadeDuration: 0.022,
+    fadeDuration: 0.018,
     driftPercent: 3.5,
     /** Faces stay lit slightly beyond their panel's window, so the light leads the copy. */
     faceLightBleed: 0.02,
@@ -159,9 +159,9 @@ export const choreography = {
 
   /** Closing statement and call to action. */
   closing: {
-    fade: [0.955, 0.995] as Window,
+    fade: [0.9402, 0.9934] as Window,
     /** Past this point the CTA becomes clickable. */
-    interactiveAt: 0.97,
+    interactiveAt: 0.9601,
   },
 } as const;
 

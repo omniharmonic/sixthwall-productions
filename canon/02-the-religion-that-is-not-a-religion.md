@@ -224,3 +224,15 @@ around." [T:245–260]
 The site says *love* without the entity language, because the site is the
 card. This text keeps the entity language because it is what was meant, and
 because the aftercare doctrine in `03-the-rite.md` makes no sense without it.
+
+## Read non-dually
+
+Everything above is misread if it is read as a set of positions held against
+opposing positions. It is held in pairs, and both halves are true at once:
+played by the story and its author [T:112]; the symbol necessary and unable to
+hold the whole [T:133]; love as the ground and "that even itself is a story"
+[T:253]; the self as pure awareness and as a character it is playing [T:239];
+the world as a play and that being no reduction at all. The gap between stage
+and house is not a wound to be closed but the way the whole sees itself, made
+conscious and run both ways. The full treatment is `07-the-epoch.md`, "What
+non-dual means here." Do not write copy from this text without it.

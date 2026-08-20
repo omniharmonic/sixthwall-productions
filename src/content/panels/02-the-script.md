@@ -3,8 +3,8 @@ order: 2
 face: 1
 eyebrow: Wall II · The Word
 heading: The spark gives up a {dimension}
-scrollIn: 0.150
-scrollOut: 0.245
+scrollIn: 0.1286
+scrollOut: 0.2043
 ---
 
 To travel, it must flatten — into text, score, blueprint, liturgy. The point becomes a line.

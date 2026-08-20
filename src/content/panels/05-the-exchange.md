@@ -3,10 +3,10 @@ order: 5
 face: 4
 eyebrow: Wall V · Back Wall
 heading: The audience {reaches back}
-scrollIn: 0.435
-scrollOut: 0.530
+scrollIn: 0.3557
+scrollOut: 0.4314
 ---
 
 The front wall is the players reaching the house. The back wall is the house reaching back — a voice into a microphone for the first time, held so well that the least practised person in the room sounds beautiful.
 
-No one is shamed for staying seated. But the fire is offered to everyone, and some take it home lit.
+No one is shamed for staying seated. But the fire is offered to everyone, and a room that takes it becomes one organism — reaching together what is usually kept for one.

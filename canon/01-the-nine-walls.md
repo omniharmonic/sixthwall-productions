@@ -6,6 +6,15 @@ rule that follows. This is the spine of everything else.*
 
 ---
 
+## Read as a cosmogony first
+
+These are the anatomy of how a world comes to be and returns — the One wanting
+to see itself (I), speaking (II), making a world (III), splitting into seer and
+seen (IV), the seen reaching back (V), the split dissolving (VI), and on through
+love, no-self and sacrifice to the next octave. They are a method second. A
+production that runs them recapitulates creation, which is why it can do what
+it does to a room. See `07-the-epoch.md`, "The walls as cosmogony."
+
 ## Two geometries
 
 The walls can be counted two ways, and both are in use.

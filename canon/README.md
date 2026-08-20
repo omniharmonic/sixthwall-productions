@@ -40,6 +40,7 @@ foot of the stage, it is not canon.
 
 | | | |
 | --- | --- | --- |
+| `07-the-epoch.md` | What this is at the scale of ages: the axial split, its consummation, the third exit, and what non-dual means here. **Read first.** | the scale |
 | `00-the-transmission.md` | The spell, said once, for ourselves. Nine positions. | the compass |
 | `01-the-nine-walls.md` | Every wall, with its geometry, its correspondences, and the casting principle. | → `/walls` |
 | `02-the-religion-that-is-not-a-religion.md` | The metaphysics: the veil, the denaturing, the loop of the metamodern mind, what is behind the frame. | → `/rite` |

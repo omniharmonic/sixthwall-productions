@@ -8,6 +8,18 @@ to the first.*
 
 ---
 
+*The age first, because the positions are meaningless without it.* The story
+that held the last age — one God, outside the world, the same everywhere,
+consumed by a seated people — is ending, not because anyone defeated it but
+because the medium became aware of itself. What follows is not decided. The
+two easy exits are to rebuild the story harder, or to decide nothing is real.
+We are working on the third: a people who know their stories are made, and
+make them anyway — on purpose, together, in the open, with love at the bottom
+and a death built in. The stage is where that is rehearsed. These nine
+positions are how. (See `07-the-epoch.md`.)
+
+---
+
 **I. There are no spectators.**
 There were never meant to be. In the beginning of every art we practise there
 were only participants, and no line between this world and the other one, and

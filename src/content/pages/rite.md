@@ -21,6 +21,12 @@ When the axial religions arrived — one God, transcendent, the same everywhere 
 
 That ironic distance is the thing we now intend to carry back the other way. Religion was always theatre too — a vast, serious, centuries-long production for getting a population into one psychic field. Politics is theatre. Money is theatre. All the walls are coming down at once, everyone can feel it, and it is mostly terrifying. The walls cannot hold; they come down with a tap. But tearing them down is neither entertaining nor kind. It invites an off-gassing of violence and leaves people standing in nothing. So we do not take them down. We build new ones, on purpose, in the open, and show people how it is done.
 
+## The age we are in
+
+Every age ends the way this one is ending: the story that held it stops being believable, and the people inside it find out that stories are things people make. Two exits are usually taken. Rebuild the story harder and punish the doubt. Or decide that nothing is real and sell tickets to the emptiness. Both are on offer right now, and both are booming.
+
+We are working on the third exit. A people who know their stories are made cannot go back to not knowing — but they do not have to choose between being lied to and having nothing. They can learn to make stories on purpose, together, in the open, with love at the bottom and a death built in, and let them go when the work is done. That has to be rehearsed somewhere. The stage is the one place where the split between the lit world and the dark house has always been visible, and therefore the one place it could always be undone. So we rehearse it there, a hundred people at a time.
+
 ## The loop
 
 Here is the rite. It is simpler than the theology, as rites usually are.
@@ -34,6 +40,12 @@ Here is the rite. It is simpler than the theology, as rites usually are.
 **Return.** And then they come back — as the authors. The purpose of the whole rite is that a person who has watched a structure of meaning be raised and broken, and has survived the space behind it, now knows that structures of meaning are *made*, and can make them, and can choose which to live inside. That is what we mean by agency. It is also what the metamodern mind is: not the postmodern discovery that the stories are constructed, but the step after it, where you understand that they must be — and so the only things that matter are the care with which they are built and the grace with which they are let go.
 
 Erect. Break. Cross. Return. Then begin again, one octave up.
+
+## Both
+
+None of this means the fourth wall was a mistake. The gap between stage and house is how anything sees itself at all: the whole, having nothing outside it to know itself by, looks at its reflection, and one becomes two. Every production is that look. We do not abolish the gap. We make it conscious, and run a current through it both ways.
+
+So our positions come in pairs, and both halves are true. You are played by the story and you are its author. The symbol is necessary and it cannot hold the whole. The ground we stand on is love, and we know that is also a story, and we stand on it anyway. Reality is a play — and that is not a reduction. It is what is left when the line between play and world, which was only ever drawn in one age, is seen through.
 
 ## Aftercare
 
