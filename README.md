@@ -4,10 +4,12 @@ The public site for Sixth Wall Productions — ritual theatre, immersive worlds,
 
 **Live:** <https://sixthwall.productions>
 
-A single-page scroll narrative: a cube net unfolds through six walls as the copy
-advances, then every face of the open cross gains depth — the six squares become
-eight cubes, the unfolded hypercube of Dalí's *Corpus Hypercubus*, standing
-upright against a flower-of-life lattice.
+The home page is a scroll narrative: a cube net unfolds through six walls as the
+copy advances, then every face of the open cross gains depth — the six squares
+become eight cubes, the unfolded hypercube of Dalí's *Corpus Hypercubus*,
+standing upright against a flower-of-life lattice. Behind it are four long-form
+pages — the walls, the rite, the worlds, partnership — and behind those, in
+`canon/`, the source texts they are drawn from.
 
 | Opening | Mid-unfold | Finale |
 | --- | --- | --- |
@@ -53,7 +55,9 @@ scroll position ──► p (0…1) ──► render(p)
 
 | To change… | Edit |
 | --- | --- |
-| **Copy** of any panel | `src/content/panels/*.md` |
+| **Copy** of any home-page panel | `src/content/panels/*.md` |
+| **A long-form page** (add, edit, reorder) | `src/content/pages/*.md` — the filename is the route |
+| **What the copy means** | `canon/*.md` — the source texts, with provenance |
 | **When** a panel appears | `scrollIn` / `scrollOut` in that panel's frontmatter |
 | **Order** of panels | `order` in frontmatter |
 | **Animation timing / feel** | `src/config/choreography.ts` |
@@ -79,9 +83,22 @@ chapter rail all move together from one edit — they cannot drift apart.
 `src/lib/panels.ts` fails the build if two panels claim the same `order` or the
 same cube `face`, or if the scroll order contradicts the sort order.
 
+### Pages
+
+Every file in `src/content/pages/` becomes a route: `walls.md` → `/walls`.
+Frontmatter carries `order`, `nav`, `eyebrow`, `title`, `lede` and
+`description`; the body is markdown rendered through `src/layouts/Prose.astro`.
+Navigation — the masthead and the doors at the foot of every page — is derived
+from the collection, so adding a page is one file and nothing else.
+
+The home page is the cube, closed; the pages are the net, unfolded. Both draw
+on `canon/`, which is not built and is where the deeper material and its
+provenance live. Read `canon/README.md` before editing either layer.
+
 ### Headings
 
-Braces italicise a phrase, in panel headings and in `site.ts` copy alike:
+Braces italicise a phrase, in panel headings, page titles and ledes, and in
+`site.ts` copy alike:
 
 ```yaml
 heading: Something wants to {be made}
@@ -103,13 +120,17 @@ src/
     choreography.ts    every animation constant, named and typed
   content/
     panels/*.md        the ten scroll panels — copy + timing
-  content.config.ts    collection schema (validated at build)
-  components/          Masthead, Rail, CubeNet, Hero, Panels, Closing
-  layouts/Base.astro   document shell, meta, Open Graph, JSON-LD
-  lib/                 emphasis helper, panel loading + invariants
+    pages/*.md         the long-form pages — one file per route
+  content.config.ts    collection schemas (validated at build)
+  components/          Masthead, Rail, CubeNet, Hero, Panels, Closing, Doors
+  layouts/
+    Base.astro         document shell, meta, Open Graph, JSON-LD
+    Prose.astro        the long-form page: head, markdown body, doors
+  lib/                 emphasis helper, panel + page loading, invariants
   scripts/             scene.ts (render loop), easing.ts
-  styles/              tokens, base, chrome, scene, copy
+  styles/              tokens, base, chrome, scene, copy, prose
 public/                CNAME, favicon, og.jpg, robots.txt
+canon/                 the source texts behind the copy — not built; read its README
 docs/
   original-mockup.html the hand-built single-file original, for reference
 ```

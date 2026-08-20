@@ -159,9 +159,16 @@
   color: var(--brass);
 }
 
+/* The doors appear with the closing statement, once the cube is the cross. */
+.close .doors {
+  margin-top: 54px;
+  justify-content: center;
+  pointer-events: auto;
+}
+
 .close small {
   display: block;
-  margin-top: 46px;
+  margin-top: 38px;
   font-family: var(--util);
   font-size: 9.5px;
   letter-spacing: 0.26em;

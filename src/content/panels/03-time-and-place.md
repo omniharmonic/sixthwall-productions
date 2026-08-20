@@ -1,12 +1,12 @@
 ---
 order: 3
 face: 2
-eyebrow: Wall III · Time & Place
-heading: The aura is {repaid}
+eyebrow: Wall III · Where & When
+heading: The line becomes a {room}
 scrollIn: 0.245
 scrollOut: 0.340
 ---
 
-A room. A date. A threshold. A duration nobody can pause. The flat thing is re-embodied and becomes singular again: this night, these bodies, this weather.
+A floor, two walls, a date, a duration nobody can pause. The flat thing stands up and is singular again: this night, these bodies, this weather.
 
-A circle is drawn. Inside it different rules apply, and everyone present has agreed to them.
+Booking, rehearsal, light — the unglamorous integrity of getting the words well-lit. A circle is drawn, and inside it different rules apply.

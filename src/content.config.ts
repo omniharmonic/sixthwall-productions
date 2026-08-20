@@ -44,4 +44,36 @@ const panels = defineCollection({
     }),
 });
 
-export const collections = { panels };
+/**
+ * The long-form pages past the home scroll: the walls, the rite, the worlds,
+ * the partnership. One markdown file per page; the filename is the route.
+ *
+ * The home page is the cube, closed and presentable. These are the net — the
+ * same thing unfolded so it can be read. They draw on the source texts in
+ * canon/, which is where the deeper material lives and where provenance is
+ * kept. Keep the pages the performance and the canon the script.
+ */
+const pages = defineCollection({
+  loader: glob({ base: './src/content/pages', pattern: '*.md' }),
+  schema: z.object({
+    /** Order in the site navigation. */
+    order: z.number().int().positive(),
+
+    /** Short label for the masthead and the doors at the foot of every page. */
+    nav: z.string().min(1),
+
+    /** Small uppercase label above the title. */
+    eyebrow: z.string().min(1),
+
+    /** Display title. Braces italicise, as in panel headings. */
+    title: z.string().min(1),
+
+    /** One or two sentences under the title, set large. Braces italicise. */
+    lede: z.string().min(1),
+
+    /** Meta description, ~150 characters. */
+    description: z.string().min(1).max(200),
+  }),
+});
+
+export const collections = { panels, pages };

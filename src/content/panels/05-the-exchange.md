@@ -1,12 +1,12 @@
 ---
 order: 5
 face: 4
-eyebrow: Wall V · The Exchange
-heading: The membrane goes {permeable}
+eyebrow: Wall V · Back Wall
+heading: The audience {reaches back}
 scrollIn: 0.435
 scrollOut: 0.530
 ---
 
-Spectators become participants and the ending stops being decided in advance. Boal called them spect-actors. We call it risk.
+The front wall is the players reaching the house. The back wall is the house reaching back — a voice into a microphone for the first time, held so well that the least practised person in the room sounds beautiful.
 
-Once an audience can act, a script can hold the shape of a world. It can no longer hold the outcome.
+No one is shamed for staying seated. But the fire is offered to everyone, and some take it home lit.

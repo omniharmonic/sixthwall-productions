@@ -6,6 +6,6 @@ scrollIn: 0.705
 scrollOut: 0.790
 ---
 
-Original works built as rites rather than shows. Threshold, ordeal, return — the dramaturgy of an actual transformation instead of a depiction of one.
+Works built as rites, not shows. We raise the frame as straight as we can make it, because a frame must be solid before it can break — and when it breaks, it breaks inside you.
 
-You leave altered, or we have not finished the piece.
+Threshold, ordeal, return. You leave altered, or we have not finished the piece.

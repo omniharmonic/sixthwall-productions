@@ -40,7 +40,7 @@ export const site = {
   },
 
   description:
-    'Ritual theatre, immersive worlds, and story partnership. We build fictions strong enough to become worlds.',
+    'Ritual theatre, immersive worlds, story partnership. Theatre has six walls; we build for the one past the exit, where a play becomes a world.',
 
   /** Sibling ventures, surfaced as the web presence grows. */
   ventures: {

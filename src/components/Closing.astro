@@ -1,6 +1,7 @@
 ---
 import { site } from '../config/site';
 import { emphasize } from '../lib/emphasis';
+import Doors from './Doors.astro';
 ---
 
 <div class="close" id="closing">
@@ -15,5 +16,6 @@ import { emphasize } from '../lib/emphasis';
     }
   </h2>
   <a class="cta" href={`mailto:${site.email}`}>{site.closing.cta}</a>
+  <Doors />
   <small>{site.name}</small>
 </div>

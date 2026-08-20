@@ -21,6 +21,7 @@
 
 .mark {
   color: var(--bone);
+  text-decoration: none;
 }
 
 .mark b {
@@ -31,15 +32,43 @@
   opacity: 0.5;
 }
 
-.masthead a {
+.masthead nav {
+  display: flex;
+  gap: 26px;
+}
+
+.masthead nav a,
+.masthead nav span {
   color: var(--muted);
   text-decoration: none;
   transition: color 0.4s;
 }
 
-.masthead a:hover,
-.masthead a:focus-visible {
+.masthead nav a:hover,
+.masthead nav a:focus-visible {
   color: var(--bone);
+}
+
+.masthead nav span[aria-current] {
+  color: var(--brass);
+}
+
+/* On a phone the masthead keeps only the mark and Contact; the doors at the
+   foot of every page carry the rest. */
+@media (max-width: 760px) {
+  .masthead nav a:not([href^='mailto']),
+  .masthead nav span {
+    display: none;
+  }
+}
+
+/* On the prose pages text scrolls under the masthead, and the difference
+   blend that keeps it legible over the cube turns that into noise. Trade the
+   blend for a soft fall-off from the ground colour. */
+body:has(.page) .masthead {
+  mix-blend-mode: normal;
+  background: linear-gradient(to bottom, var(--ink) 0%, rgba(8, 8, 10, 0.92) 55%, rgba(8, 8, 10, 0) 100%);
+  padding-bottom: 34px;
 }
 
 /* Chapter rail — roman numerals tracking the six walls. */

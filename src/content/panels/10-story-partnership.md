@@ -6,4 +6,6 @@ scrollIn: 0.875
 scrollOut: 0.945
 ---
 
-For projects, movements and organisations already building something real. We find the myth already latent in the work and make it enterable — so the world you are trying to bring about can be felt by people before it exists.
+For organisations and movements already building something real. We find the myth latent in the work and make it enterable, so the world you are trying to bring about can be felt before it exists.
+
+Never a brand partnership. A frame that hands authorship back — cultivating verbs, not collecting nouns.

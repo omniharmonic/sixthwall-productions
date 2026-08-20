@@ -1,0 +1,26 @@
+---
+/**
+ * One route per file in src/content/pages. The filename is the slug:
+ * src/content/pages/walls.md → /walls
+ */
+import { render } from 'astro:content';
+import Prose from '../layouts/Prose.astro';
+import { getPages } from '../lib/pages';
+
+export async function getStaticPaths() {
+  const pages = await getPages();
+  return pages.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<Prose
+  title={entry.data.title}
+  eyebrow={entry.data.eyebrow}
+  lede={entry.data.lede}
+  description={entry.data.description}
+>
+  <Content />
+</Prose>

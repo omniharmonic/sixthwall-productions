@@ -1,8 +1,29 @@
 ---
 import { site } from '../config/site';
+import { getPages, pageHref } from '../lib/pages';
+
+interface Props {
+  /** Path of the current page. Omit on the home page. */
+  current?: string;
+}
+
+const { current } = Astro.props;
+const pages = await getPages();
 ---
 
 <header class="masthead">
-  <div class="mark"><b>{site.wordmark.lead}</b> <span>{site.wordmark.trail}</span></div>
-  <a href={`mailto:${site.email}`}>Contact</a>
+  <a class="mark" href="/"><b>{site.wordmark.lead}</b> <span>{site.wordmark.trail}</span></a>
+  <nav aria-label="Primary">
+    {
+      pages.map((page) => {
+        const href = pageHref(page);
+        return href === current ? (
+          <span aria-current="page">{page.data.nav}</span>
+        ) : (
+          <a href={href}>{page.data.nav}</a>
+        );
+      })
+    }
+    <a href={`mailto:${site.email}`}>Contact</a>
+  </nav>
 </header>

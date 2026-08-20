@@ -35,10 +35,27 @@ used to cost a 224° spin at 400°/s. See the note on `sway()` in `easing.ts`.
 `public/CNAME`, `site.url` in `src/config/site.ts`, and the GitHub Pages custom
 domain. See `docs/INFRASTRUCTURE.md`.
 
+**The copy has two layers, and the canon is upstream.** `canon/*.md` holds the
+source texts — what is actually meant, with provenance to the founders'
+recorded conversation (`[T:n]` line refs) and anything proposed rather than
+transcribed marked `[PROPOSED]`. `src/content/` holds what is said in public.
+When editing copy, read the relevant canon text first; when the two disagree,
+fix the one that is wrong rather than letting them drift. The canon is in a
+public repository: nothing in it names a third party or repeats anything the
+Herd of God holds sealed. See `canon/README.md`.
+
 ## Conventions
 
-- Copy that is not a panel lives in `src/config/site.ts`, never inline in a
-  component. The contact email in particular must stay a single reference.
+- Copy that is not a panel or a page lives in `src/config/site.ts`, never
+  inline in a component. The contact email in particular must stay a single
+  reference.
+- Long-form pages are `src/content/pages/<slug>.md`; the filename is the
+  route, and navigation is derived from the collection. Do not hand-write a
+  nav list anywhere.
+- The company's voice explains mechanism rather than meaning, owns positions
+  in the first person plural, lands long sentences on short flat ones, and
+  does not hedge. It may be funny; it may not be cute. Never "journey", never
+  "transformational" as an adjective, never "brand partnership".
 - Braces mark italics in headings: `{like this}`. See `src/lib/emphasis.ts`.
   Never pass raw HTML through frontmatter.
 - `src/lib/panels.ts` throws on incoherent timelines. Keep it that way — a

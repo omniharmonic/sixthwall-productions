@@ -1,0 +1,45 @@
+---
+/**
+ * Layout for the long-form pages.
+ *
+ * No cube, no scroll engine: a single measured column of prose on the same
+ * ground, type and brass as the home page. The head carries eyebrow, title
+ * and lede from the page's frontmatter; the body is the markdown; the doors
+ * at the foot lead everywhere else.
+ */
+import Base from './Base.astro';
+import Masthead from '../components/Masthead.astro';
+import Doors from '../components/Doors.astro';
+import { emphasize, plainText } from '../lib/emphasis';
+
+interface Props {
+  title: string;
+  eyebrow: string;
+  lede: string;
+  description: string;
+}
+
+const { title, eyebrow, lede, description } = Astro.props;
+const current = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+
+<Base title={plainText(title)} description={description}>
+  <Masthead current={current} />
+
+  <main class="page">
+    <header class="page-head">
+      <div class="eyebrow">{eyebrow}</div>
+      <h1 set:html={emphasize(title)} />
+      <p class="lede" set:html={emphasize(lede)} />
+    </header>
+
+    <article class="prose">
+      <slot />
+    </article>
+
+    <footer class="page-foot">
+      <Doors current={current} />
+      <small>{plainText(title)} · Sixth Wall Productions</small>
+    </footer>
+  </main>
+</Base>

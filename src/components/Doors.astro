@@ -1,0 +1,36 @@
+---
+/**
+ * The doors: links to every long-form page, plus contact.
+ *
+ * Rendered twice — at the foot of every inner page, and inside the closing
+ * statement of the home scroll, where they appear only after the cube has
+ * become the cross. The play world does not stop at the door.
+ *
+ * Navigation is derived from the pages collection, so adding a page is one
+ * markdown file and nothing else.
+ */
+import { site } from '../config/site';
+import { getPages, pageHref } from '../lib/pages';
+
+interface Props {
+  /** Path of the current page, so it can be marked rather than linked. */
+  current?: string;
+}
+
+const { current } = Astro.props;
+const pages = await getPages();
+---
+
+<nav class="doors" aria-label="Site">
+  {
+    pages.map((page) => {
+      const href = pageHref(page);
+      return href === current ? (
+        <span aria-current="page">{page.data.nav}</span>
+      ) : (
+        <a href={href}>{page.data.nav}</a>
+      );
+    })
+  }
+  <a href={`mailto:${site.email}`}>Contact</a>
+</nav>
