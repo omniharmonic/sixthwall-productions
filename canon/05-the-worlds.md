@@ -44,23 +44,13 @@ itself over and over again." [T:403–406]
   A lexicon. A growing number of people unsure which parts they believe. "The
   world of the show continues to recreate itself." [T:404]
 
-## Psychomagic 9
+## Not ours
 
-- Duncan's, with Morgane Ciot writing what was "essentially a novel" for it.
-  [T:572–587]
-- Twelve characters, cast for resemblance to the nine planets and the nine
-  points of the Enneagram. Each with arcs and decision trees. The audience can
-  help a character complete their quest or actively interfere and make them
-  worse. A binary per character — healed or not — gives eighteen nodes and
-  three scripted endings. Open world; three hours; too long, by Duncan's own
-  account. [T:574–587]
-- "Without the audience participating, those characters would just be running
-  their own loops. They'd be all but asking for help to get out of their own
-  loops. If the audience didn't ask, their loop would be imperceptible and
-  continuing." [T:578]
-- **What it taught.** The back wall as architecture: agency that must be
-  discovered, not announced.
-- **Gap.** Dates, venue and cast are not in the record. Duncan has them.
+*Psychomagic 9* is discussed at length in the conversation [T:570–587] and is
+not a Sixth Wall production. It predates the company and belongs to its own
+makers. It stays out of the worlds page and out of this list; the lesson it is
+cited for — agency that must be discovered rather than announced — is carried
+by the back wall in `01-the-nine-walls.md` without naming it.
 
 ## Independence, the Musical
 

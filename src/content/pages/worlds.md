@@ -4,7 +4,7 @@ nav: The Worlds
 eyebrow: What we have made
 title: The Worlds
 lede: A show ends when the lights come up. A world ends when the last person stops performing it. {We build the second kind.}
-description: The worlds of Sixth Wall Productions — the Herd of God, Psychomagic 9, Independence the Musical, the Creative Cauldron — and what separates an immersive world from a show.
+description: The worlds of Sixth Wall Productions — the Herd of God, Independence the Musical, the Creative Cauldron — and what separates an immersive world from a show.
 ---
 
 An immersive world is not a show with the seats removed. Any six-walled production is immersive by default; it implicates the audience or it is not six-walled. A world is something else. It persists past the night. It has a cosmology, a cast, a liturgy, a lexicon, a gesture, a hymn — enough structure that it can be entered by people who were not at the premiere, and enough looseness that it keeps recreating itself without its makers in the room. At some point it is no longer clear where the production stops and the city begins. That is the point.
@@ -20,12 +20,6 @@ A neo-kabbalistic doomsday church that worships humanity's first god, the Calf �
 The Herd is our clearest sixth wall. It began as a one-man revival show, became a cell, became a congregation; it now has a theology in four pamphlets, a creed, a sign made with the hands, hymns that people hum without meaning to, and a growing number of participants who are no longer entirely sure which parts of it they believe. That uncertainty is not a failure of the work. It is the work. One night happened, and the world it opened has kept recreating itself ever since.
 
 It is also where the rite is most visible. The form is a megachurch service, raised as straight as we could build it — the call and response, the testimony, the altar call, the glass of milk. The object at the centre of it is the one thing every child of the book has been told is the idol. Hold those side by side and the room has to ask what, exactly, it is enjoying, and why it feels so much like church. Then the calf burns, and the question is no longer theirs to answer from a seat.
-
-## Psychomagic 9
-
-An open-world rite. Twelve characters, cast for their resonance with the nine planets and the nine points of the Enneagram, each running the loop that is their particular way of being stuck — and each, if you watch closely, all but asking for help to get out of it. The audience can give that help. Or withhold it. Or make things worse. Eighteen endings, a novel's worth of text behind the character sheets, three hours in the room.
-
-Without the audience, nothing happens. The characters simply continue, and their loops are imperceptible. This is the back wall made into an architecture, and it taught us that agency cannot be announced. It has to be discovered by someone who realises, twenty minutes in, that the woman weeping by the window will keep weeping until somebody speaks to her.
 
 ## Independence, the Musical
 
