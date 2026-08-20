@@ -116,7 +116,7 @@ docs/
 
 ### Why the CSS is global
 
-`scene.ts` creates the mini cubes and lattice circles at runtime. Astro's
+`scene.ts` creates the cube walls and lattice circles at runtime. Astro's
 scoped styles work by stamping an attribute onto elements at *build* time, so
 scoped rules would silently never match those nodes. The stylesheets are
 therefore plain global CSS, imported once in `Base.astro`.

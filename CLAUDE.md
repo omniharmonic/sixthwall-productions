@@ -5,8 +5,8 @@ Pages on push to `main`. Read `README.md` first — it explains the architecture
 
 ## Non-obvious constraints
 
-**Styles must stay global.** `src/scripts/scene.ts` builds the mini cubes and
-the lattice circles with `createElement` at runtime. Astro's scoped `<style>`
+**Styles must stay global.** `src/scripts/scene.ts` builds the cube walls, the
+two crossing cells and the lattice circles with `createElement` at runtime. Astro's scoped `<style>`
 stamps a `data-astro-cid-*` attribute at build time, which runtime-created
 nodes never receive — so scoped rules fail silently on exactly the elements
 that need them. Add CSS to `src/styles/*.css`, not to component `<style>`

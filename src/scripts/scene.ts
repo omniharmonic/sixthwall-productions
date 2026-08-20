@@ -33,9 +33,6 @@ interface PanelTiming {
  * what staggers the extrusion into a ripple travelling outward along the cross.
  */
 interface Cell {
-  element: HTMLElement;
-  column: number;
-  row: number;
   ring: number;
   walls: HTMLElement[];
 }
@@ -137,10 +134,10 @@ export function mountScene(): void {
       return wall;
     });
 
-  const cells: Cell[] = NET_CELLS.map((spec) => {
-    const element = must<HTMLElement>(`#${spec.id}`);
-    return { element, column: spec.column, row: spec.row, ring: spec.ring, walls: addWalls(element, WALL_COUNT) };
-  });
+  const cells: Cell[] = NET_CELLS.map((spec) => ({
+    ring: spec.ring,
+    walls: addWalls(must<HTMLElement>(`#${spec.id}`), WALL_COUNT),
+  }));
 
   /**
    * The two cells that exist only in four dimensions.
@@ -191,39 +188,6 @@ export function mountScene(): void {
       element.style.left = `${-half}px`;
       element.style.top = `${-half}px`;
     }
-  }
-
-  /** One mini cube per cell of the net, six faces each. */
-  const minis = cells.map(() => {
-    const cube = document.createElement('div');
-    cube.className = 'mini';
-    for (let i = 0; i < 6; i += 1) cube.appendChild(document.createElement('div'));
-    net.appendChild(cube);
-    return cube;
-  });
-
-  const MINI_FACE_ROTATIONS = [
-    'rotateY(0deg)',
-    'rotateY(90deg)',
-    'rotateY(180deg)',
-    'rotateY(-90deg)',
-    'rotateX(90deg)',
-    'rotateX(-90deg)',
-  ];
-
-  function layoutMinis(): void {
-    const size = edge * 0.34;
-    const halfSize = size / 2;
-
-    minis.forEach((cube, index) => {
-      const cell = cells[index]!;
-      cube.style.left = `${cell.column * edge - halfSize}px`;
-      cube.style.top = `${cell.row * edge - halfSize}px`;
-      [...cube.children].forEach((face, faceIndex) => {
-        (face as HTMLElement).style.transform =
-          `${MINI_FACE_ROTATIONS[faceIndex]} translateZ(${halfSize}px)`;
-      });
-    });
   }
 
   /**
@@ -291,7 +255,6 @@ export function mountScene(): void {
 
   measure();
   layoutNet();
-  layoutMinis();
   buildLattice();
 
   /* ── the loop ───────────────────────────────────────────────────────── */
@@ -375,23 +338,6 @@ export function mountScene(): void {
       face.classList.toggle('lit', p >= window[0] - bleed && p < window[1] + bleed);
     });
 
-    /* mini cubes bloom out of each cell, staggered, then dissolve into the
-       real cubes the cells become */
-    const { minis: M } = C;
-    const dissolved = segment(p, ...M.fadeOut);
-    minis.forEach((cube, index) => {
-      const offset = index * M.stagger;
-      const bloom = easeOut(segment(p, M.bloom[0] + offset, M.bloom[1] + offset));
-      const size = lerp(M.scale.from, M.scale.to, bloom);
-      const phase = t + index * M.phaseOffset * M.tumble.periodSec;
-      const tumble = reducedMotion ? 0 : sway(phase, M.tumble.periodSec) * M.tumble.deg;
-      const pitch = reducedMotion ? 0 : sway(phase, M.tumble.periodSec * 1.618) * M.tumble.deg * 0.6;
-
-      cube.style.opacity = (bloom * (1 - dissolved)).toFixed(3);
-      cube.style.transform =
-        `scale(${size.toFixed(3)}) rotateX(${pitch.toFixed(1)}deg) rotateY(${tumble.toFixed(1)}deg)`;
-    });
-
     /* the finale: each cell of the net gains depth, the ripple travelling out
        from the crossing, and the hypercube's last two cells bud off its face */
     const { hypercube: H } = C;
@@ -460,7 +406,6 @@ export function mountScene(): void {
   addEventListener('resize', () => {
     measure();
     layoutNet();
-    layoutMinis();
     readScroll();
   });
 

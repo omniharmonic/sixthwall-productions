@@ -109,25 +109,6 @@ export const choreography = {
   },
 
   /**
-   * Mini cubes blooming out of each net cell, staggered.
-   *
-   * They are a promise the finale keeps: a small cube appears in every cell,
-   * and then the cell itself becomes one. They dissolve as that happens, so
-   * the two motifs cross-fade rather than sit inside one another.
-   */
-  minis: {
-    bloom: [0.575, 0.655] as Window,
-    /** Added to both ends of `bloom` per cube index, for the cascade. */
-    stagger: 0.014,
-    fadeOut: [0.775, 0.85] as Window,
-    scale: { from: 0.2, to: 1.0 },
-    /** Bounded tumble, as for the orbit: degrees of amplitude, seconds/cycle. */
-    tumble: { deg: 24, periodSec: 8 },
-    /** Cycles of phase offset per cube, so they never tumble in lockstep. */
-    phaseOffset: 0.37,
-  },
-
-  /**
    * The finale: every cell of the net gains depth, and the cross of six
    * squares becomes a cross of cubes — the unfolded hypercube of Dalí's
    * *Corpus Hypercubus*.

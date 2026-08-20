@@ -5,7 +5,7 @@
  * at runtime to position the flaps in JS, so the two stay in step across the
  * mobile breakpoint without duplicating the numbers.
  *
- * These selectors are global on purpose: scene.ts creates the mini cubes and
+ * These selectors are global on purpose: scene.ts creates the cube walls and
  * the lattice circles at runtime, and runtime-created nodes never carry
  * Astro's scoped-style attribute.
  */
@@ -139,24 +139,6 @@
   will-change: opacity;
   -webkit-mask-image: radial-gradient(closest-side, #000 40%, transparent 100%);
   mask-image: radial-gradient(closest-side, #000 40%, transparent 100%);
-}
-
-/* One mini cube per cell of the net. Built by scene.ts. */
-.mini {
-  position: absolute;
-  width: calc(var(--S) * 0.34);
-  height: calc(var(--S) * 0.34);
-  transform-style: preserve-3d;
-  will-change: transform, opacity;
-  opacity: 0;
-}
-
-.mini > div {
-  position: absolute;
-  inset: 0;
-  border: 1px solid rgba(185, 143, 62, 0.46);
-  background: linear-gradient(150deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.015));
-  box-shadow: inset 0 0 20px rgba(185, 143, 62, 0.1);
 }
 
 /* Flower of life. Circles are appended by scene.ts. */
